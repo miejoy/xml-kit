@@ -1,20 +1,19 @@
 //
-//  Attr.swift
+//  File.swift
 //  
 //
-//  Created by 黄磊 on 2020-03-21.
+//  Created by 黄磊 on 2020-03-25.
 //
 
 import Foundation
 
-/// 任意属性协议，方便 Decoder 和 Encoder 操作
-protocol AnyAttr {
+protocol AnyPlaintext {
     
 }
 
 /// 属性包装器，使用它包装的属性将于 XML 标签中的属性绑定
 @propertyWrapper
-public class Attr<Value:Codable> : Codable, AnyAttr {
+public class Plaintext<Value:Codable> : Codable, AnyPlaintext {
         
     var value : Value?
     
@@ -53,34 +52,3 @@ public class Attr<Value:Codable> : Codable, AnyAttr {
     }
     
 }
-
-
-// MARK: - AnyOption
-
-protocol _AnyOptionalType {
-    static var wrappedType: Any.Type { get }
-    static var `nil`: Any { get }
-    var wrappedValue: Any? { get }
-}
-
-protocol _OptionalType: _AnyOptionalType {
-    associatedtype Wrapped
-}
-
-extension _OptionalType {
-    public static var wrappedType: Any.Type {
-        return Wrapped.self
-    }
-}
-
-extension Optional: _OptionalType {
-    public static var `nil`: Any {
-        Self.none as Any
-    }
-
-    public var wrappedValue: Any? {
-        self
-    }
-}
-
-

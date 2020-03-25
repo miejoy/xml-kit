@@ -252,8 +252,17 @@ internal struct _XMLKeyedDecodingContainer<K : CodingKey> : KeyedDecodingContain
     }
     
     func decode<T>(_ type: T.Type, forKey key: K) throws -> T where T : Decodable {
-        if let attrType = type as? AnyAttr.Type {
-            return try self.decode(attrType, forKey: key) as! T
+        if type is AnyAttr.Type {
+            let value = element.attributes[key.stringValue]
+            self.decoder.codingPath.append(key)
+            defer { self.decoder.codingPath.removeLast() }
+            let decoder = _XMLAttrDecoder(key: key.stringValue, content: value, decoder: self.decoder)
+            return try T.init(from: decoder)
+        } else if type is AnyPlaintext.Type {
+            self.decoder.decodeOnlyValue = true
+            self.decoder.codingPath.append(key)
+            defer { self.decoder.codingPath.removeLast(); self.decoder.decodeOnlyValue = false }
+            return try T.init(from: self.decoder)
         }
         guard let element = self.container[key.stringValue] else {
             throw DecodingError._keyNotFound(at: self.decoder.codingPath, with: key, strategy: self.decoder.options.elementNameDecodingStrategy)
@@ -266,19 +275,6 @@ internal struct _XMLKeyedDecodingContainer<K : CodingKey> : KeyedDecodingContain
             throw DecodingError._valueNotFound(at: self.decoder.codingPath, with: type)
         }
         return value
-    }
-    
-    func decode(_ type: AnyAttr.Type, forKey key: K) throws -> AnyAttr {
-        
-        let value = element.attributes[key.stringValue]
-        
-        self.decoder.codingPath.append(key)
-        defer { self.decoder.codingPath.removeLast() }
-        
-        let decoder = _XMLAttrDecoder(key: key.stringValue, content: value, decoder: self.decoder)
-        let attr = type.init()
-        try attr.decode(from: decoder)
-        return attr
     }
     
     func nestedContainer<NestedKey>(keyedBy type: NestedKey.Type, forKey key: K) throws -> KeyedDecodingContainer<NestedKey> where NestedKey : CodingKey {

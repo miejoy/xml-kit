@@ -404,8 +404,8 @@ extension _XMLEncoder : SingleValueEncodingContainer {
         assertCanEncodeNewValue()
         let newElement = try self.box(value, with: "")
         topElement.value = newElement.value
-        topElement.children = newElement.children
-        topElement.attributes = newElement.attributes
+        topElement.children += newElement.children
+        topElement.attributes.merge(newElement.attributes) { $1 }
     }
     
 }

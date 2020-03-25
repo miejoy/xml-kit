@@ -210,6 +210,7 @@ internal class _XMLDecoder : Decoder {
     let rootElement : _XMLElement
     
     var storage : _XMLDecodingStorage
+    var decodeOnlyValue : Bool = false
     
     /// 最上层元素，这里指的是当前正在编码的原始
     var topElement : _XMLElement {
@@ -267,6 +268,9 @@ extension _XMLDecoder : SingleValueDecodingContainer {
     }
     
     func decodeNil() -> Bool {
+        if decodeOnlyValue {
+            return self.topElement.value == nil
+        }
         return self.topElement.value == nil && self.topElement.attributes.isEmpty && self.topElement.children.isEmpty
     }
     

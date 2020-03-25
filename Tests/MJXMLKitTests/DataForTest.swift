@@ -61,6 +61,26 @@ struct UserAttr : Codable {
     
 }
 
+struct UserPlaintext : Codable {
+    
+    @Attr var id : Int
+    
+    @Attr var alias : String?
+        
+    @Plaintext var content : String
+    
+}
+
+struct UserPlaintextOption : Codable {
+    
+    @Attr var id : Int
+    
+    @Attr var alias : String?
+        
+    @Plaintext var content : String?
+    
+}
+
 struct UserMix : Codable {
     
     @Attr var id : Int
@@ -344,6 +364,17 @@ let userAttrXMLStrNormal = """
 
 let userAttrXMLStrNoOption = """
 <user id="\(s_int)" name="\(s_str)">
+</user>
+"""
+
+let userPlaintextXMLStrNormal = """
+<user id="\(s_int)" alias="\(s_strOption)">
+\(s_str)
+</user>
+"""
+
+let userPlaintextXMLStrNoOption = """
+<user id="\(s_int)" alias="\(s_strOption)">
 </user>
 """
 

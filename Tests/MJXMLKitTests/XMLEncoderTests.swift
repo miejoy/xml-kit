@@ -96,6 +96,45 @@ final class XMLEncoderTests: XCTestCase {
         
     }
     
+    func testPlaintext() throws {
+        
+        let data = userPlaintextXMLStrNormal.data(using: .utf8)!
+        
+        let tmpUser = try XMLDecoder().decode(UserPlaintext.self, from: data)
+        let newData = try XMLEncoder().encode(tmpUser, withRootKey: "user")
+        let user = try XMLDecoder().decode(UserPlaintext.self, from: newData)
+        
+        XCTAssertEqual(user.id, s_int)
+        XCTAssertEqual(user.alias, s_strOption)
+        XCTAssertEqual(user.content, s_str)
+    }
+    
+    func testPlaintextOption() throws {
+        
+        let data = userPlaintextXMLStrNormal.data(using: .utf8)!
+        
+        let tmpUser = try XMLDecoder().decode(UserPlaintextOption.self, from: data)
+        let newData = try XMLEncoder().encode(tmpUser, withRootKey: "user")
+        let user = try XMLDecoder().decode(UserPlaintextOption.self, from: newData)
+        
+        XCTAssertEqual(user.id, s_int)
+        XCTAssertEqual(user.alias, s_strOption)
+        XCTAssertEqual(user.content, s_str)
+    }
+    
+    func testPlaintextNoOption() throws {
+        
+        let data = userPlaintextXMLStrNoOption.data(using: .utf8)!
+        
+        let tmpUser = try XMLDecoder().decode(UserPlaintextOption.self, from: data)
+        let newData = try XMLEncoder().encode(tmpUser, withRootKey: "user")
+        let user = try XMLDecoder().decode(UserPlaintextOption.self, from: newData)
+        
+        XCTAssertEqual(user.id, s_int)
+        XCTAssertEqual(user.alias, s_strOption)
+        XCTAssertNil(user.content)
+    }
+    
     
     // MARK: - Container
     

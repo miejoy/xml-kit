@@ -105,8 +105,20 @@ internal struct _XMLKeyedEncodingContainer<K : CodingKey> : KeyedEncodingContain
 
     mutating func encode<T : Encodable>(_ value: T, forKey key: Key) throws {
         
-        if let aValue = value as? AnyAttr {
-            try encode(aValue, forKey: key)
+        if value is AnyAttr {
+            self.encoder.codingPath.append(key)
+            defer { self.encoder.codingPath.removeLast() }
+            
+            let newKey = self.encoder.options.attrNameEncodingStrategy.convertFrom(key.stringValue, path: self.encoder.codingPath)
+            
+            let aEncoder = _XMLAttrEncoder(key: newKey, element: container, encoder: encoder)
+            try value.encode(to: aEncoder)
+            return
+        } else if value is AnyPlaintext {
+            self.encoder.codingPath.append(key)
+            defer { self.encoder.codingPath.removeLast() }
+            
+            try value.encode(to: encoder)
             return
         }
         
@@ -114,19 +126,6 @@ internal struct _XMLKeyedEncodingContainer<K : CodingKey> : KeyedEncodingContain
         defer { self.encoder.codingPath.removeLast() }
         
         self.container.children.append(try self.encoder.box(value, with: _converted(key).stringValue))
-    }
-    
-    func encode(_ value: AnyAttr, forKey key: K) throws {
-        
-        self.encoder.codingPath.append(key)
-        defer { self.encoder.codingPath.removeLast() }
-        
-        let newKey = self.encoder.options.attrNameEncodingStrategy.convertFrom(key.stringValue, path: self.encoder.codingPath)
-        
-        let aEncoder = _XMLAttrEncoder(key: newKey, element: container, encoder: encoder)
-        
-        try value.encode(to: aEncoder)
-
     }
 
     mutating func nestedContainer<NestedKey>(keyedBy keyType: NestedKey.Type, forKey key: Key) -> KeyedEncodingContainer<NestedKey> {
