@@ -7,9 +7,9 @@
 
 #if canImport(FoundationXML)
 import FoundationXML
-#else
-import Foundation
 #endif
+import Foundation
+
 
 
 /// XML 解析类，调用的系统的 XMLPaser
