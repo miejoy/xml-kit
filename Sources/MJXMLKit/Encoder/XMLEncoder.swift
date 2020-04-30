@@ -6,7 +6,9 @@
 //
 
 import Foundation
+#if canImport(Combine)
 import Combine
+#endif
 
 open class XMLEncoder {
     
@@ -256,6 +258,7 @@ open class XMLEncoder {
     }
 }
 
+#if canImport(Combine)
 @available(OSX 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
 extension XMLEncoder : TopLevelEncoder {
     
@@ -265,6 +268,7 @@ extension XMLEncoder : TopLevelEncoder {
         return try encode(value, withRootKey: "Root", header: nil)
     }
 }
+#endif
 
 
 // MARK: - _XMLEncoder
