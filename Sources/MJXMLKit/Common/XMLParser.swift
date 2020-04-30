@@ -5,7 +5,12 @@
 //  Created by 黄磊 on 2020-03-21.
 //
 
+#if canImport(FoundationXML)
+import FoundationXML
+#else
 import Foundation
+#endif
+
 
 /// XML 解析类，调用的系统的 XMLPaser
 internal class _XMLParser: NSObject, XMLParserDelegate {
