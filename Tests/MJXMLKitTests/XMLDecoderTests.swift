@@ -350,4 +350,36 @@ final class XMLDecoderTests: XCTestCase {
     }
     
     
+    func testRealData() throws {
+        
+        struct Message : Codable {
+            var sid : String
+//            var dateCreated : Date
+//            var dateUpdated : Date
+//            var dateSent : Date
+            var accountSid : String
+            var to : String
+            var from : String
+            var body : String
+            var status : String
+            var numSegments : Int
+            var numMedia : Int
+            var direction : String
+            var uri : String
+        }
+        
+        struct Response : Codable {
+            var message : Message
+        }
+        
+        let str = """
+<?xml version=\'1.0\' encoding=\'UTF-8\'?>\n<TwilioResponse><Message><Sid>SM2937db4f67a44d708a3f4ab2cccc01ff</Sid><DateCreated>Tue, 28 Apr 2020 10:05:23 +0000</DateCreated><DateUpdated>Tue, 28 Apr 2020 10:05:23 +0000</DateUpdated><DateSent/><AccountSid>AC57aca902415a9bb557e9ce146c973fe0</AccountSid><To>+8617092615319</To><From>+18508088882</From><MessagingServiceSid/><Body>content</Body><Status>queued</Status><NumSegments>1</NumSegments><NumMedia>0</NumMedia><Direction>outbound-api</Direction><ApiVersion>2010-04-01</ApiVersion><Price/><PriceUnit>USD</PriceUnit><ErrorCode/><ErrorMessage/><Uri>/2010-04-01/Accounts/AC57aca902415a9bb557e9ce146c973fe0/Messages/SM2937db4f67a44d708a3f4ab2cccc01ff</Uri><SubresourceUris><Media>/2010-04-01/Accounts/AC57aca902415a9bb557e9ce146c973fe0/Messages/SM2937db4f67a44d708a3f4ab2cccc01ff/Media</Media></SubresourceUris></Message></TwilioResponse>
+"""
+        let decoder = XMLDecoder()
+        decoder.elementNameDecodingStrategy = .lowercaseFirstLetter
+        let response = try decoder.decode(Response.self, from: str.data(using: .utf8)!)
+        
+        XCTAssertEqual(response.message.sid, "SM2937db4f67a44d708a3f4ab2cccc01ff")
+    }
+    
 }

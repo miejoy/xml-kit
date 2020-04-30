@@ -6,7 +6,9 @@
 //
 
 import Foundation
+#if canImport(Combine)
 import Combine
+#endif
 
 /// XML 解码器
 open class XMLDecoder {
@@ -193,11 +195,13 @@ open class XMLDecoder {
     }
 }
 
+#if canImport(Combine)
 @available(OSX 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
 extension XMLDecoder : TopLevelDecoder {
 
     public typealias Input = Data
 }
+#endif
 
 // MARK: - _XMLDecoder
 
