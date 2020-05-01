@@ -23,7 +23,9 @@ let package = Package(
         // Targets can depend on other targets in this package, and on products in packages which this package depends on.
         .target(
             name: "MJXMLKit",
-            dependencies: []),
+            dependencies: [],
+            linkerSettings: [.unsafeFlags(["-lxml2"])]
+        ),
         .testTarget(
             name: "MJXMLKitTests",
             dependencies: ["MJXMLKit"]),
