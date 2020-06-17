@@ -135,6 +135,41 @@ final class XMLEncoderTests: XCTestCase {
         XCTAssertNil(user.content)
     }
     
+    func testBrothersOption() throws {
+        
+        let data = userBrothersXMLStrNoOption.data(using: .utf8)!
+        
+        let tmpUser = try XMLDecoder().decode(UserBrothers.self, from: data)
+        let newData = try XMLEncoder().encode(tmpUser, withRootKey: "user")
+        let user = try XMLDecoder().decode(UserBrothers.self, from: newData)
+        
+        XCTAssertEqual(user.id, s_int)
+        XCTAssertEqual(user.name, s_str)
+        XCTAssert(user.brothers.isEmpty)
+    }
+    
+    func testBrothersNoOption() throws {
+        
+        let data = userBrothersXMLStrNormal.data(using: .utf8)!
+        
+        let tmpUser = try XMLDecoder().decode(UserBrothers.self, from: data)
+        let newData = try XMLEncoder().encode(tmpUser, withRootKey: "user")
+        let user = try XMLDecoder().decode(UserBrothers.self, from: newData)
+        
+        XCTAssertEqual(user.id, s_int)
+        XCTAssertEqual(user.name, s_str)
+        let brother = user.brothers.first!
+        let sencond = user.brothers[1]
+        XCTAssertEqual(brother.id, s_int)
+        XCTAssertEqual(brother.alias, s_strOption)
+        XCTAssertEqual(brother.age, s_intOption)
+        XCTAssertEqual(brother.name, s_str)
+        XCTAssertEqual(sencond.id, s_int)
+        XCTAssertEqual(sencond.alias, s_strOption)
+        XCTAssertEqual(sencond.age, s_intOption)
+        XCTAssertEqual(sencond.name, s_str)
+    }
+    
     
     // MARK: - Container
     

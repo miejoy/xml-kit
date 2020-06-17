@@ -125,7 +125,17 @@ internal struct _XMLKeyedEncodingContainer<K : CodingKey> : KeyedEncodingContain
         self.encoder.codingPath.append(key)
         defer { self.encoder.codingPath.removeLast() }
         
-        self.container.children.append(try self.encoder.box(value, with: _converted(key).stringValue))
+        let element = try self.encoder.box(value, with: _converted(key).stringValue)
+        if value is AnyBrothers {
+            let strKey = _converted(key).stringValue
+            let children = element.children.map { (element) -> _XMLElement in
+                element.name = strKey
+                return element
+            }
+            self.container.children.append(contentsOf: children)
+        } else {
+            self.container.children.append(try self.encoder.box(value, with: _converted(key).stringValue))
+        }
     }
 
     mutating func nestedContainer<NestedKey>(keyedBy keyType: NestedKey.Type, forKey key: Key) -> KeyedEncodingContainer<NestedKey> {
