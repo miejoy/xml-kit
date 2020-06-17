@@ -49,7 +49,15 @@ public class Attr<Value:Codable> : Codable, AnyAttr {
     
     public func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
-        try container.encode(self.wrappedValue)
+        if Value.self is _AnyOptionalType.Type {
+            if let value = self.value {
+                try container.encode(value)
+            } else {
+                try container.encodeNil()
+            }
+        } else {
+            try container.encode(self.wrappedValue)
+        }
     }
     
 }

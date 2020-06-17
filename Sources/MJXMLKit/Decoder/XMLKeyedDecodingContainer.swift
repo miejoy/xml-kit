@@ -31,10 +31,26 @@ internal struct _XMLKeyedDecodingContainer<K : CodingKey> : KeyedDecodingContain
         self.element = element
         // 读取 container
         var container = [String:_XMLElement]()
+        var dicContainer = [String:[_XMLElement]]()
         for element in element.children {
             let aName = decoder.options.elementNameDecodingStrategy
                 .convertFrom(element.name, path: (self.codingPath + [_XMLKey(stringValue: element.name)!]))
-            container[aName] = element
+            // 这里有可能有相同名称，需要当做数组对待，放在 children 里
+            if let aElement = container[aName] {
+                var arr = dicContainer[aName] ?? []
+                if arr.isEmpty {
+                    arr.append(aElement)
+                }
+                arr.append(element)
+                dicContainer[aName] = arr
+            } else {
+                container[aName] = element
+            }
+        }
+        // 覆盖 arrContainer 中的原始
+        for item in dicContainer {
+            let element = _XMLElement(name: item.key, value: nil, children: item.value)
+            container[item.key] = element
         }
         self.container = container
     }
@@ -265,6 +281,10 @@ internal struct _XMLKeyedDecodingContainer<K : CodingKey> : KeyedDecodingContain
             return try T.init(from: self.decoder)
         }
         guard let element = self.container[key.stringValue] else {
+            // 如果是 Brothers , 即使是空的我们也要返回一个数组
+            if type is AnyBrothers.Type {
+                return try T.init(from: self.decoder)
+            }
             throw DecodingError._keyNotFound(at: self.decoder.codingPath, with: key, strategy: self.decoder.options.elementNameDecodingStrategy)
         }
         
