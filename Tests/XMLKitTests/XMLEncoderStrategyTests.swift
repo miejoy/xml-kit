@@ -1,14 +1,14 @@
 //
-//  XMLDecoderStrategyTests.swift
+//  XMLEncoderStrategyTests.swift
 //  
 //
 //  Created by 黄磊 on 2020-03-23.
 //
 
 import XCTest
-import MJXMLKit
+import XMLKit
 
-final class XMLDecoderStrategyTests: XCTestCase {
+final class XMLEncoderStrategyTests: XCTestCase {
     
     
     // MARK: - Data
@@ -19,7 +19,11 @@ final class XMLDecoderStrategyTests: XCTestCase {
         
         let decoder = XMLDecoder()
         decoder.dateDecodingStrategy = .secondsSince1970
-        let date = try decoder.decode(DateStrategy.self, from: data)
+        let tmpDate = try decoder.decode(DateStrategy.self, from: data)
+        let encoder = XMLEncoder()
+        encoder.dateEncodingStrategy = .secondsSince1970
+        let newData = try encoder.encode(tmpDate, withRootKey: "date")
+        let date = try decoder.decode(DateStrategy.self, from: newData)
         
         // 这里存在误差，无法直接对比
         XCTAssertEqual(date.createTime.description, s_date.description)
@@ -35,7 +39,11 @@ final class XMLDecoderStrategyTests: XCTestCase {
         
         let decoder = XMLDecoder()
         decoder.dateDecodingStrategy = .secondsSince1970
-        let date = try decoder.decode(DateStrategy.self, from: data)
+        let tmpDate = try decoder.decode(DateStrategy.self, from: data)
+        let encoder = XMLEncoder()
+        encoder.dateEncodingStrategy = .secondsSince1970
+        let newData = try encoder.encode(tmpDate, withRootKey: "date")
+        let date = try decoder.decode(DateStrategy.self, from: newData)
         
         // 这里存在误差，无法直接对比
         XCTAssertEqual(date.createTime.description, s_date.description)
@@ -51,7 +59,11 @@ final class XMLDecoderStrategyTests: XCTestCase {
         
         let decoder = XMLDecoder()
         decoder.dateDecodingStrategy = .millisecondsSince1970
-        let date = try decoder.decode(DateStrategy.self, from: data)
+        let tmpDate = try decoder.decode(DateStrategy.self, from: data)
+        let encoder = XMLEncoder()
+        encoder.dateEncodingStrategy = .millisecondsSince1970
+        let newData = try encoder.encode(tmpDate, withRootKey: "date")
+        let date = try decoder.decode(DateStrategy.self, from: newData)
         
         // 这里存在误差，无法直接对比
         XCTAssertEqual(date.createTime.description, s_date.description)
@@ -67,7 +79,11 @@ final class XMLDecoderStrategyTests: XCTestCase {
         
         let decoder = XMLDecoder()
         decoder.dateDecodingStrategy = .iso8601
-        let date = try decoder.decode(DateStrategy.self, from: data)
+        let tmpDate = try decoder.decode(DateStrategy.self, from: data)
+        let encoder = XMLEncoder()
+        encoder.dateEncodingStrategy = .iso8601
+        let newData = try encoder.encode(tmpDate, withRootKey: "date")
+        let date = try decoder.decode(DateStrategy.self, from: newData)
         
         // 这里存在误差，无法直接对比
         XCTAssertEqual(date.createTime.description, s_date.description)
@@ -83,7 +99,11 @@ final class XMLDecoderStrategyTests: XCTestCase {
         
         let decoder = XMLDecoder()
         decoder.dateDecodingStrategy = .formatted(s_customDateFormatter)
-        let date = try decoder.decode(DateStrategy.self, from: data)
+        let tmpDate = try decoder.decode(DateStrategy.self, from: data)
+        let encoder = XMLEncoder()
+        encoder.dateEncodingStrategy = .formatted(s_customDateFormatter)
+        let newData = try encoder.encode(tmpDate, withRootKey: "date")
+        let date = try decoder.decode(DateStrategy.self, from: newData)
         
         // 这里存在误差，无法直接对比
         XCTAssertEqual(date.createTime.description, s_date.description)
@@ -106,7 +126,15 @@ final class XMLDecoderStrategyTests: XCTestCase {
             }
             throw DecodingError.dataCorruptedError(in: container, debugDescription: "Decoder date failed")
         })
-        let date = try decoder.decode(DateStrategy.self, from: data)
+        let tmpDate = try decoder.decode(DateStrategy.self, from: data)
+        let encoder = XMLEncoder()
+        encoder.dateEncodingStrategy = .custom({ (data, encoder) in
+            var container = encoder.singleValueContainer()
+            let str = s_customDateFormatter.string(from: data)
+            try container.encode(str)
+        })
+        let newData = try encoder.encode(tmpDate, withRootKey: "date")
+        let date = try decoder.decode(DateStrategy.self, from: newData)
         
         // 这里存在误差，无法直接对比
         XCTAssertEqual(date.createTime.description, s_date.description)
@@ -129,7 +157,15 @@ final class XMLDecoderStrategyTests: XCTestCase {
             }
             throw DecodingError.dataCorruptedError(in: container, debugDescription: "Decoder date failed")
         })
-        let date = try decoder.decode(DateStrategy.self, from: data)
+        let tmpDate = try decoder.decode(DateStrategy.self, from: data)
+        let encoder = XMLEncoder()
+        encoder.dateEncodingStrategy = .custom({ (data, encoder) in
+            var container = encoder.singleValueContainer()
+            let str = s_customDateFormatter.string(from: data)
+            try container.encode(str)
+        })
+        let newData = try encoder.encode(tmpDate, withRootKey: "date")
+        let date = try decoder.decode(DateStrategy.self, from: newData)
         
         // 这里存在误差，无法直接对比
         XCTAssertEqual(date.createTime.description, s_date.description)
@@ -147,9 +183,12 @@ final class XMLDecoderStrategyTests: XCTestCase {
         
         let decoder = XMLDecoder()
         decoder.dataDecodingStrategy = .base64
-        let theData = try decoder.decode(DataStrategy.self, from: data)
+        let tmpData = try decoder.decode(DataStrategy.self, from: data)
+        let encoder = XMLEncoder()
+        encoder.dataEncodingStrategy = .base64
+        let newData = try encoder.encode(tmpData, withRootKey: "data")
+        let theData = try decoder.decode(DataStrategy.self, from: newData)
         
-        // 这里存在误差，无法直接对比
         XCTAssertEqual(theData.dataAttr, s_data)
         XCTAssertEqual(theData.dataAttrOption!, s_dataOption)
         XCTAssertEqual(theData.data, s_data)
@@ -170,9 +209,16 @@ final class XMLDecoderStrategyTests: XCTestCase {
             }
             throw DecodingError.dataCorruptedError(in: container, debugDescription: "Decoder date failed")
         })
-        let theData = try decoder.decode(DataStrategy.self, from: data)
+        let tmpData = try decoder.decode(DataStrategy.self, from: data)
+        let encoder = XMLEncoder()
+        encoder.dataEncodingStrategy = .custom({ (data, encoder) in
+            var container = encoder.singleValueContainer()
+            let str = String(data: data, encoding: .utf8)
+            try container.encode(str)
+        })
+        let newData = try encoder.encode(tmpData, withRootKey: "data")
+        let theData = try decoder.decode(DataStrategy.self, from: newData)
         
-        // 这里存在误差，无法直接对比
         XCTAssertEqual(theData.dataAttr, s_data.base64EncodedString().data(using: .utf8))
         XCTAssertEqual(theData.dataAttrOption!, s_dataOption.base64EncodedString().data(using: .utf8))
         XCTAssertEqual(theData.data, s_data.base64EncodedString().data(using: .utf8))
@@ -188,12 +234,16 @@ final class XMLDecoderStrategyTests: XCTestCase {
         
         let decoder = XMLDecoder()
         decoder.nonConformingFloatDecodingStrategy = .convertFromString(positiveInfinity: s_floatPositiveInfinity, negativeInfinity: s_floatNegativeInfinity, nan: s_floatNan)
-        let theFloat = try decoder.decode(FloatStrategy.self, from: data)
+        let tmpData = try decoder.decode(FloatStrategy.self, from: data)
+        let encoder = XMLEncoder()
+        encoder.nonConformingFloatEncodingStrategy = .convertToString(positiveInfinity: s_floatPositiveInfinity, negativeInfinity: s_floatNegativeInfinity, nan: s_floatNan)
+        let newData = try encoder.encode(tmpData, withRootKey: "float")
+        let theFloat = try decoder.decode(FloatStrategy.self, from: newData)
         
-        // 这里存在误差，无法直接对比
         XCTAssertEqual(theFloat.floatAttr, Float.infinity)
         XCTAssertEqual(theFloat.floatAttrOption!, -Float.infinity)
         XCTAssertTrue(theFloat.float.isNaN)
+        // 这里存在误差，无法直接对比
         XCTAssertEqual(theFloat.floatOption!, s_floatNormal)
         
     }
@@ -204,12 +254,17 @@ final class XMLDecoderStrategyTests: XCTestCase {
         
         let decoder = XMLDecoder()
         decoder.nonConformingFloatDecodingStrategy = .convertFromString(positiveInfinity: s_floatPositiveInfinity, negativeInfinity: s_floatNegativeInfinity, nan: s_floatNan)
-        let theFloat = try decoder.decode(DoubleStrategy.self, from: data)
+        let tmpData = try decoder.decode(DoubleStrategy.self, from: data)
+        let encoder = XMLEncoder()
+        encoder.nonConformingFloatEncodingStrategy = .convertToString(positiveInfinity: s_floatPositiveInfinity, negativeInfinity: s_floatNegativeInfinity, nan: s_floatNan)
+        let newData = try encoder.encode(tmpData, withRootKey: "float")
+        let theFloat = try decoder.decode(DoubleStrategy.self, from: newData)
         
-        // 这里存在误差，无法直接对比
+        
         XCTAssertEqual(theFloat.floatAttr, Double.infinity)
         XCTAssertEqual(theFloat.floatAttrOption!, -Double.infinity)
         XCTAssertTrue(theFloat.float.isNaN)
+        // 这里存在误差，无法直接对比
         XCTAssertTrue(abs(theFloat.floatOption! - Double(s_floatNormal)) < 0.001)
         
     }
@@ -222,9 +277,12 @@ final class XMLDecoderStrategyTests: XCTestCase {
         
         let decoder = XMLDecoder()
         decoder.elementNameDecodingStrategy = .lowercaseFirstLetter
-        let element = try decoder.decode(ElementName.self, from: data)
+        let tmpData = try decoder.decode(ElementName.self, from: data)
+        let encoder = XMLEncoder()
+        encoder.elementNameEncodingStrategy = .uppercaseFirstLetter
+        let newData = try encoder.encode(tmpData, withRootKey: "element")
+        let element = try decoder.decode(ElementName.self, from: newData)
         
-        // 这里存在误差，无法直接对比
         XCTAssertEqual(element.elementName, s_int)
         XCTAssertEqual(element.elementNameOption!, s_intOption)
         
@@ -236,9 +294,12 @@ final class XMLDecoderStrategyTests: XCTestCase {
         
         let decoder = XMLDecoder()
         decoder.elementNameDecodingStrategy = .convertFromSnakeCase
-        let element = try decoder.decode(ElementName.self, from: data)
+        let tmpData = try decoder.decode(ElementName.self, from: data)
+        let encoder = XMLEncoder()
+        encoder.elementNameEncodingStrategy = .convertToSnakeCase
+        let newData = try encoder.encode(tmpData, withRootKey: "element")
+        let element = try decoder.decode(ElementName.self, from: newData)
         
-        // 这里存在误差，无法直接对比
         XCTAssertEqual(element.elementName, s_int)
         XCTAssertEqual(element.elementNameOption!, s_intOption)
         
@@ -251,6 +312,11 @@ final class XMLDecoderStrategyTests: XCTestCase {
             "element_name_option" : "elementNameOption"
         ]
         
+        let dicRevert = [
+            "elementName" : "element_name",
+            "elementNameOption" : "element_name_option"
+        ]
+        
         let data = elementXMLSnakeCase.data(using: .utf8)!
         
         let decoder = XMLDecoder()
@@ -258,7 +324,14 @@ final class XMLDecoderStrategyTests: XCTestCase {
             let lastKey = keys.last!.stringValue
             return XMLKey(stringValue: dic[lastKey] ?? "")!
         })
-        let element = try decoder.decode(ElementName.self, from: data)
+        let tmpData = try decoder.decode(ElementName.self, from: data)
+        let encoder = XMLEncoder()
+        encoder.elementNameEncodingStrategy = .custom({ (keys) -> CodingKey in
+            let lastKey = keys.last!.stringValue
+            return XMLKey(stringValue: dicRevert[lastKey] ?? "")!
+        })
+        let newData = try encoder.encode(tmpData, withRootKey: "element")
+        let element = try decoder.decode(ElementName.self, from: newData)
         
         // 这里存在误差，无法直接对比
         XCTAssertEqual(element.elementName, s_int)
@@ -272,7 +345,11 @@ final class XMLDecoderStrategyTests: XCTestCase {
         
         let decoder = XMLDecoder()
         decoder.attrNameDecodingStrategy = .lowercaseFirstLetter
-        let attr = try decoder.decode(AttrName.self, from: data)
+        let tmpData = try decoder.decode(AttrName.self, from: data)
+        let encoder = XMLEncoder()
+        encoder.attrNameEncodingStrategy = .uppercaseFirstLetter
+        let newData = try encoder.encode(tmpData, withRootKey: "attr")
+        let attr = try decoder.decode(AttrName.self, from: newData)
         
         // 这里存在误差，无法直接对比
         XCTAssertEqual(attr.attrName, s_str)
@@ -286,7 +363,11 @@ final class XMLDecoderStrategyTests: XCTestCase {
         
         let decoder = XMLDecoder()
         decoder.attrNameDecodingStrategy = .convertFromSnakeCase
-        let attr = try decoder.decode(AttrName.self, from: data)
+        let tmpData = try decoder.decode(AttrName.self, from: data)
+        let encoder = XMLEncoder()
+        encoder.attrNameEncodingStrategy = .convertToSnakeCase
+        let newData = try encoder.encode(tmpData, withRootKey: "attr")
+        let attr = try decoder.decode(AttrName.self, from: newData)
         
         // 这里存在误差，无法直接对比
         XCTAssertEqual(attr.attrName, s_str)
@@ -295,10 +376,15 @@ final class XMLDecoderStrategyTests: XCTestCase {
     }
     
     func testAttrNameCustom() throws {
-        
+        do {
         let dic = [
             "attr_name" : "attrName",
             "attr_name_option" : "attrNameOption"
+        ]
+        
+        let dicRevert = [
+            "attrName" : "attr_name",
+            "attrNameOption" : "attr_name_option"
         ]
         
         let data = attrXMLSnakeCase.data(using: .utf8)!
@@ -308,12 +394,21 @@ final class XMLDecoderStrategyTests: XCTestCase {
             let lastKey = keys.last!.stringValue
             return XMLKey(stringValue: dic[lastKey] ?? "")!
         })
-        let attr = try decoder.decode(AttrName.self, from: data)
+        let tmpData = try decoder.decode(AttrName.self, from: data)
+        let encoder = XMLEncoder()
+        encoder.attrNameEncodingStrategy = .custom({ (keys) -> CodingKey in
+            let lastKey = keys.last!.stringValue
+            return XMLKey(stringValue: dicRevert[lastKey] ?? "")!
+        })
+        let newData = try encoder.encode(tmpData, withRootKey: "attr")
+        let attr = try decoder.decode(AttrName.self, from: newData)
         
         // 这里存在误差，无法直接对比
         XCTAssertEqual(attr.attrName, s_str)
         XCTAssertEqual(attr.attrNameOption!, s_strOption)
-        
+        } catch {
+            print(error)
+        }
     }
     
 }

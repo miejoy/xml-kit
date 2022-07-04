@@ -39,7 +39,6 @@ internal class _XMLAttrDecoder : Decoder {
     // MARK: - Decoder Methods
 
     func container<Key>(keyedBy type: Key.Type) throws -> KeyedDecodingContainer<Key> {
-        
         throw DecodingError.valueNotFound(KeyedDecodingContainer<Key>.self,
                                           DecodingError.Context(codingPath: self.codingPath,
                                                                 debugDescription: "Attr decoder do not have container"))

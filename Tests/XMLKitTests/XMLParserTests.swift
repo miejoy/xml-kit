@@ -6,7 +6,7 @@
 //
 
 import XCTest
-@testable import MJXMLKit
+@testable import XMLKit
 
 final class XMLParserTests: XCTestCase {
     
