@@ -70,7 +70,6 @@ extension _XMLAttrEncoder : SingleValueEncodingContainer {
     }
     
     func encode(_ value: Double) throws {
-        
         self.element.attributes[key] = try self.encoder.box(value, with: key).value
     }
     

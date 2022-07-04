@@ -271,5 +271,4 @@ extension _XMLDecoder {
         
         return decoded
     }
-    
 }

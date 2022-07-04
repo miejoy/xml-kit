@@ -6,7 +6,7 @@
 //
 
 import XCTest
-import MJXMLKit
+import XMLKit
 
 final class XMLEncoderTests: XCTestCase {
     
@@ -336,9 +336,7 @@ final class XMLEncoderTests: XCTestCase {
         XCTAssertEqual(secondOwner.age, s_intOption)
         
     }
-    
-    
-    
+        
     func testOptionNestedUnkeyedContainerNoOption() throws {
         
         let data = userBookXMLStrNormal.data(using: .utf8)!
@@ -360,7 +358,6 @@ final class XMLEncoderTests: XCTestCase {
         XCTAssertEqual(secondOwner.alias, s_strOption)
         XCTAssertEqual(secondOwner.name, s_str)
         XCTAssertEqual(secondOwner.age, s_intOption)
-        
     }
     
     func testOptionSingleContainerAllAttr() throws {
@@ -380,14 +377,10 @@ final class XMLEncoderTests: XCTestCase {
         XCTAssertEqual(firstBook.alias, s_strOption)
         XCTAssertEqual(secondBook.id, s_int)
         XCTAssertNil(secondBook.alias)
-
     }
     
     
     // MAKR: - Inherit
-    
-    
-    
     
     func testInherit() throws {
         
@@ -401,7 +394,6 @@ final class XMLEncoderTests: XCTestCase {
         XCTAssertEqual(square.name, s_str)
         XCTAssertEqual(square.size, s_int)
         XCTAssertEqual(square.commonName, s_strOption)
-
     }
     
     func testNSInheritWithSupper() throws {
@@ -416,8 +408,39 @@ final class XMLEncoderTests: XCTestCase {
         XCTAssertEqual(square.name, s_str)
         XCTAssertEqual(square.size, s_int)
         XCTAssertEqual(square.commonName, s_strOption)
-        
     }
     
-    
+    func testAllCover() throws {
+        let data = allCoverXML.data(using: .utf8)!
+        
+        let tmpAllCover = try XMLDecoder().decode(AllCover.self, from: data)
+        let newData = try XMLEncoder().encode(tmpAllCover, withRootKey: "item")
+        let allCover = try XMLDecoder().decode(AllCover.self, from: newData)
+        
+        XCTAssertEqual(allCover.boolA, s_bool)
+        XCTAssertEqual(allCover.intA, s_int)
+        XCTAssertEqual(allCover.int8A, Int8(s_int))
+        XCTAssertEqual(allCover.int16A, Int16(s_int))
+        XCTAssertEqual(allCover.int32A, Int32(s_int))
+        XCTAssertEqual(allCover.int64A, Int64(s_int))
+        XCTAssertEqual(allCover.uIntA, UInt(s_int))
+        XCTAssertEqual(allCover.uInt8A, UInt8(s_int))
+        XCTAssertEqual(allCover.uInt16A, UInt16(s_int))
+        XCTAssertEqual(allCover.uInt32A, UInt32(s_int))
+        XCTAssertEqual(allCover.uInt64A, UInt64(s_int))
+        XCTAssertEqual(allCover.stringA, s_str)
+        
+        XCTAssertEqual(allCover.bool, s_bool)
+        XCTAssertEqual(allCover.int, s_int)
+        XCTAssertEqual(allCover.int8, Int8(s_int))
+        XCTAssertEqual(allCover.int16, Int16(s_int))
+        XCTAssertEqual(allCover.int32, Int32(s_int))
+        XCTAssertEqual(allCover.int64, Int64(s_int))
+        XCTAssertEqual(allCover.uInt, UInt(s_int))
+        XCTAssertEqual(allCover.uInt8, UInt8(s_int))
+        XCTAssertEqual(allCover.uInt16, UInt16(s_int))
+        XCTAssertEqual(allCover.uInt32, UInt32(s_int))
+        XCTAssertEqual(allCover.uInt64, UInt64(s_int))
+        XCTAssertEqual(allCover.string, s_str)
+    }
 }

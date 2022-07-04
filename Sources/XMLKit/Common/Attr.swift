@@ -59,9 +59,7 @@ public class Attr<Value:Codable> : Codable, AnyAttr {
             try container.encode(self.wrappedValue)
         }
     }
-    
 }
-
 
 // MARK: - AnyOption
 

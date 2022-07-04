@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import MJXMLKit
+import XMLKit
 
 internal struct XMLKey : CodingKey {
     var stringValue: String
@@ -335,8 +335,39 @@ struct AttrName : Codable {
     @Attr var attrNameOption : String?
 }
 
+// MARK: - Cover More
+
+struct AllCover: Codable {
+    @Attr var boolA: Bool
+    @Attr var intA: Int
+    @Attr var int8A: Int8
+    @Attr var int16A: Int16
+    @Attr var int32A: Int32
+    @Attr var int64A: Int64
+    @Attr var uIntA: UInt
+    @Attr var uInt8A: UInt8
+    @Attr var uInt16A: UInt16
+    @Attr var uInt32A: UInt32
+    @Attr var uInt64A: UInt64
+    @Attr var stringA: String
+    
+    var bool: Bool
+    var int: Int
+    var int8: Int8
+    var int16: Int16
+    var int32: Int32
+    var int64: Int64
+    var uInt: UInt
+    var uInt8: UInt8
+    var uInt16: UInt16
+    var uInt32: UInt32
+    var uInt64: UInt64
+    var string: String
+}
+
 // MARK: ---
 
+let s_bool : Bool = true
 let s_int : Int = 1
 let s_intOption : Int = 2
 let s_str : String = "asd"
@@ -605,6 +636,25 @@ let attrXMLFirstUppercase = """
 let attrXMLSnakeCase = """
 <attr attr_name="\(s_str)" attr_name_option="\(s_strOption)">
 </attr>
+"""
+
+// MARK: - Cover More
+
+let allCoverXML = """
+<item boolA="\(s_bool)" intA="\(s_int)" int8A="\(s_int)" int16A="\(s_int)" int32A="\(s_int)" int64A="\(s_int)" uIntA="\(s_int)" uInt8A="\(s_int)" uInt16A="\(s_int)" uInt32A="\(s_int)" uInt64A="\(s_int)" stringA="\(s_str)">
+    <bool>\(s_bool)</bool>
+    <int>\(s_int)</int>
+    <int8>\(s_int)</int8>
+    <int16>\(s_int)</int16>
+    <int32>\(s_int)</int32>
+    <int64>\(s_int)</int64>
+    <uInt>\(s_int)</uInt>
+    <uInt8>\(s_int)</uInt8>
+    <uInt16>\(s_int)</uInt16>
+    <uInt32>\(s_int)</uInt32>
+    <uInt64>\(s_int)</uInt64>
+    <string>\(s_str)</string>
+</item>
 """
 
 

@@ -1,6 +1,6 @@
 import XCTest
 
-import MJXMLKitTests
+import XMLKitTests
 
 var tests = [XCTestCaseEntry]()
 

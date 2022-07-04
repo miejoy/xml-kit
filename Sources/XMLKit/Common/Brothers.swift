@@ -43,5 +43,4 @@ public class Brothers<Value:Codable> : Codable, AnyBrothers {
         var container = encoder.singleValueContainer()
         try container.encode(self.wrappedValue)
     }
-    
 }

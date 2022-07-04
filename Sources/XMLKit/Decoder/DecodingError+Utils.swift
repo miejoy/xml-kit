@@ -54,5 +54,4 @@ extension DecodingError {
     internal static func _typeMismatch(at path: [CodingKey], expectation: Any.Type, reality: String) -> DecodingError {
         return .typeMismatch(expectation, Context(codingPath: path, debugDescription: "Expected to decode \(expectation) but found \(reality) instead."))
     }
-    
 }

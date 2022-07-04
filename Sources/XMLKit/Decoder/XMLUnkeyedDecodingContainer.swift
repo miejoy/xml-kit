@@ -337,8 +337,4 @@ internal struct _XMLUnkeyedDecodingContainer : UnkeyedDecodingContainer  {
         return _XMLDecoder(rootElement: element, at: self.decoder.codingPath, options: self.decoder.options)
         
     }
-    
-
-    
-
 }
