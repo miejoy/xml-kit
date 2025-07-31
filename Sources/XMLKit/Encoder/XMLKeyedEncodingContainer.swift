@@ -1,13 +1,13 @@
 //
 //  _XMLKeyedEncodingContainer.swift
-//  
+//
 //
 //  Created by 黄磊 on 2020-03-23.
 //
 
 import Foundation
 
-internal struct _XMLKeyedEncodingContainer<K : CodingKey> : KeyedEncodingContainerProtocol {
+internal struct _XMLKeyedEncodingContainer<K: CodingKey>: KeyedEncodingContainerProtocol {
     typealias Key = K
 
     // MARK: Properties
@@ -103,8 +103,7 @@ internal struct _XMLKeyedEncodingContainer<K : CodingKey> : KeyedEncodingContain
         self.container.children.append(try self.encoder.box(value, with: _converted(key).stringValue))
     }
 
-    mutating func encode<T : Encodable>(_ value: T, forKey key: Key) throws {
-        
+    mutating func encode<T: Encodable>(_ value: T, forKey key: Key) throws {
         if value is AnyAttr {
             self.encoder.codingPath.append(key)
             defer { self.encoder.codingPath.removeLast() }
@@ -162,7 +161,6 @@ internal struct _XMLKeyedEncodingContainer<K : CodingKey> : KeyedEncodingContain
         defer { self.encoder.codingPath.removeLast() }
         
         return _XMLUnkeyedEncodingContainer(encoder: self.encoder, element: newElement)
-
     }
 
     /// 一般是类自己编码的时候使用

@@ -12,7 +12,6 @@ import Combine
 
 /// XML 解码器
 open class XMLDecoder {
-    
     // MARK: Options
 
     /// The strategy to use for decoding `Date` values.
@@ -85,7 +84,6 @@ open class XMLDecoder {
             guard !stringKey.isEmpty else { return stringKey }
             
             return stringKey.first!.lowercased() + stringKey.dropFirst()
-            
         }
         
         internal static func _convertFromSnakeCase(_ stringKey: String) -> String {
@@ -108,7 +106,7 @@ open class XMLDecoder {
             let trailingUnderscoreRange = stringKey.index(after: lastNonUnderscore)..<stringKey.endIndex
         
             let components = stringKey[keyRange].split(separator: "_")
-            let joinedString : String
+            let joinedString: String
             if components.count == 1 {
                 // No underscores in key, leave the word as is - maybe already camel cased
                 joinedString = String(stringKey[keyRange])
@@ -117,13 +115,13 @@ open class XMLDecoder {
             }
         
             // Do a cheap isEmpty check before creating and appending potentially empty strings
-            let result : String
-            if (leadingUnderscoreRange.isEmpty && trailingUnderscoreRange.isEmpty) {
+            let result: String
+            if leadingUnderscoreRange.isEmpty && trailingUnderscoreRange.isEmpty {
                 result = joinedString
-            } else if (!leadingUnderscoreRange.isEmpty && !trailingUnderscoreRange.isEmpty) {
+            } else if !leadingUnderscoreRange.isEmpty && !trailingUnderscoreRange.isEmpty {
                 // Both leading and trailing underscores
                 result = String(stringKey[leadingUnderscoreRange]) + joinedString + String(stringKey[trailingUnderscoreRange])
-            } else if (!leadingUnderscoreRange.isEmpty) {
+            } else if !leadingUnderscoreRange.isEmpty {
                 // Just leading
                 result = String(stringKey[leadingUnderscoreRange]) + joinedString
             } else {
@@ -151,7 +149,7 @@ open class XMLDecoder {
     open var attrNameDecodingStrategy: KeyDecodingStrategy = .useDefaultKeys
     
     /// Contextual user-provided information for use during decoding.
-    open var userInfo: [CodingUserInfoKey : Any] = [:]
+    open var userInfo: [CodingUserInfoKey: Any] = [:]
 
     /// Options set on the top-level encoder to pass down the decoding hierarchy.
     internal struct _Options {
@@ -160,7 +158,7 @@ open class XMLDecoder {
         let nonConformingFloatDecodingStrategy: NonConformingFloatDecodingStrategy
         let elementNameDecodingStrategy: KeyDecodingStrategy
         let attrNameDecodingStrategy: KeyDecodingStrategy
-        let userInfo: [CodingUserInfoKey : Any]
+        let userInfo: [CodingUserInfoKey: Any]
     }
 
     /// The options set on the top-level decoder.
@@ -180,13 +178,15 @@ open class XMLDecoder {
 
     // MARK: - Decoding Values
 
-    open func decode<T : Decodable>(_ type: T.Type, from data: Data) throws -> T {
-
+    open func decode<T: Decodable>(_ type: T.Type, from data: Data) throws -> T {
         let rootElement: _XMLElement
         do {
            rootElement = try _XMLParser.parse(with: data)
         } catch {
-            throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: [], debugDescription: "The given data was not valid XML.", underlyingError: error))
+            throw DecodingError.dataCorrupted(DecodingError.Context(
+                codingPath: [],
+                debugDescription: "The given data was not valid XML.",
+                underlyingError: error))
         }
 
         let decoder = _XMLDecoder(rootElement: rootElement, at: [], options: self.options)
@@ -197,8 +197,7 @@ open class XMLDecoder {
 
 #if canImport(Combine)
 @available(OSX 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-extension XMLDecoder : TopLevelDecoder {
-
+extension XMLDecoder: TopLevelDecoder {
     public typealias Input = Data
 }
 #endif
@@ -206,18 +205,16 @@ extension XMLDecoder : TopLevelDecoder {
 // MARK: - _XMLDecoder
 
 /// 实际使用的 XML 解码器
-internal class _XMLDecoder : Decoder {
-    
-    
+internal class _XMLDecoder: Decoder {
     // MARK: Properties
 
-    let rootElement : _XMLElement
+    let rootElement: _XMLElement
     
-    var storage : _XMLDecodingStorage
-    var decodeOnlyValue : Bool = false
+    var storage: _XMLDecodingStorage
+    var decodeOnlyValue: Bool = false
     
     /// 最上层元素，这里指的是当前正在编码的原始
-    var topElement : _XMLElement {
+    var topElement: _XMLElement {
         return storage.topElement
     }
 
@@ -228,7 +225,7 @@ internal class _XMLDecoder : Decoder {
     internal(set) public var codingPath: [CodingKey]
 
     /// Contextual user-provided information for use during encoding.
-    public var userInfo: [CodingUserInfoKey : Any] {
+    public var userInfo: [CodingUserInfoKey: Any] {
         return self.options.userInfo
     }
 
@@ -246,7 +243,6 @@ internal class _XMLDecoder : Decoder {
     // MARK: - Decoder Methods
 
     public func container<Key>(keyedBy type: Key.Type) throws -> KeyedDecodingContainer<Key> {
-        
         let container = _XMLKeyedDecodingContainer<Key>.init(decoder: self, element: topElement)
         
         return KeyedDecodingContainer(container)
@@ -263,11 +259,12 @@ internal class _XMLDecoder : Decoder {
 }
 
 
-extension _XMLDecoder : SingleValueDecodingContainer {
-    
+extension _XMLDecoder: SingleValueDecodingContainer {
     private func expectNonNil<T>(_ type: T.Type) throws {
         guard !self.decodeNil() else {
-            throw DecodingError.valueNotFound(type, DecodingError.Context(codingPath: self.codingPath, debugDescription: "Expected \(type) but found null value instead."))
+            throw DecodingError.valueNotFound(type, DecodingError.Context(
+                codingPath: self.codingPath,
+                debugDescription: "Expected \(type) but found null value instead."))
         }
     }
     
@@ -348,7 +345,7 @@ extension _XMLDecoder : SingleValueDecodingContainer {
         return try self.unbox(topElement, as: UInt64.self)!
     }
     
-    func decode<T>(_ type: T.Type) throws -> T where T : Decodable {
+    func decode<T>(_ type: T.Type) throws -> T where T: Decodable {
         try expectNonNil(T.self)
         return try self.unbox(topElement, as: T.self)!
     }

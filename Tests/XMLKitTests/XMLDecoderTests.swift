@@ -1,6 +1,6 @@
 //
 //  XMLDecoderTests.swift
-//  
+//
 //
 //  Created by 黄磊 on 2020-03-22.
 //
@@ -9,9 +9,7 @@ import XCTest
 import XMLKit
 
 final class XMLDecoderTests: XCTestCase {
-    
     func testNormal() throws {
-        
         let data = userXMLStrNarmal.data(using: .utf8)!
         
         let user = try XMLDecoder().decode(User.self, from: data)
@@ -20,11 +18,9 @@ final class XMLDecoderTests: XCTestCase {
         XCTAssertEqual(user.alias, s_strOption)
         XCTAssertEqual(user.name, s_str)
         XCTAssertEqual(user.age, s_intOption)
-        
     }
     
     func testNoOption() throws {
-        
         let data = userXMLStrNoOption.data(using: .utf8)!
         
         let user = try XMLDecoder().decode(User.self, from: data)
@@ -33,11 +29,9 @@ final class XMLDecoderTests: XCTestCase {
         XCTAssertNil(user.alias)
         XCTAssertEqual(user.name, s_str)
         XCTAssertNil(user.age)
-        
     }
     
     func testAttrNormal() throws {
-        
         let data = userAttrXMLStrNormal.data(using: .utf8)!
         
         let user = try XMLDecoder().decode(UserAttr.self, from: data)
@@ -46,11 +40,9 @@ final class XMLDecoderTests: XCTestCase {
         XCTAssertEqual(user.alias, s_strOption)
         XCTAssertEqual(user.name, s_str)
         XCTAssertEqual(user.age, s_intOption)
-        
     }
     
     func testAttrNoOption() throws {
-        
         let data = userAttrXMLStrNoOption.data(using: .utf8)!
         
         let user = try XMLDecoder().decode(UserAttr.self, from: data)
@@ -59,11 +51,9 @@ final class XMLDecoderTests: XCTestCase {
         XCTAssertNil(user.alias)
         XCTAssertEqual(user.name, s_str)
         XCTAssertNil(user.age)
-        
     }
     
     func testMixNormal() throws {
-        
         let data = userMixXMLStrNormal.data(using: .utf8)!
         
         let user = try XMLDecoder().decode(UserMix.self, from: data)
@@ -72,11 +62,9 @@ final class XMLDecoderTests: XCTestCase {
         XCTAssertEqual(user.alias, s_strOption)
         XCTAssertEqual(user.name, s_str)
         XCTAssertEqual(user.age, s_intOption)
-        
     }
     
     func testMixNoOption() throws {
-        
         let data = userMixXMLStrNoOption.data(using: .utf8)!
         
         let user = try XMLDecoder().decode(UserMix.self, from: data)
@@ -85,11 +73,9 @@ final class XMLDecoderTests: XCTestCase {
         XCTAssertNil(user.alias)
         XCTAssertEqual(user.name, s_str)
         XCTAssertNil(user.age)
-        
     }
     
     func testPlaintext() throws {
-        
         let data = userPlaintextXMLStrNormal.data(using: .utf8)!
         
         let user = try XMLDecoder().decode(UserPlaintext.self, from: data)
@@ -100,7 +86,6 @@ final class XMLDecoderTests: XCTestCase {
     }
     
     func testPlaintextOption() throws {
-        
         let data = userPlaintextXMLStrNormal.data(using: .utf8)!
         
         let user = try XMLDecoder().decode(UserPlaintextOption.self, from: data)
@@ -111,7 +96,6 @@ final class XMLDecoderTests: XCTestCase {
     }
     
     func testPlaintextNoOption() throws {
-        
         let data = userPlaintextXMLStrNoOption.data(using: .utf8)!
         
         let user = try XMLDecoder().decode(UserPlaintextOption.self, from: data)
@@ -125,7 +109,6 @@ final class XMLDecoderTests: XCTestCase {
     // MARK: - Container
     
     func testNestedContainer() throws {
-        
         let data = bookXMLStrNormal.data(using: .utf8)!
         
         let book = try XMLDecoder().decode(Book.self, from: data)
@@ -137,11 +120,9 @@ final class XMLDecoderTests: XCTestCase {
         XCTAssertEqual(user.alias, s_strOption)
         XCTAssertEqual(user.name, s_str)
         XCTAssertEqual(user.age, s_intOption)
-        
     }
     
     func testNestedContainerNoOption() throws {
-        
         let data = bookXMLStrNoOption.data(using: .utf8)!
         
         let book = try XMLDecoder().decode(Book.self, from: data)
@@ -153,12 +134,10 @@ final class XMLDecoderTests: XCTestCase {
         XCTAssertNil(user.alias)
         XCTAssertEqual(user.name, s_str)
         XCTAssertNil(user.age)
-        
     }
     
     
     func testOptionNestedContainer() throws {
-        
         let data = bookXMLStrNormal.data(using: .utf8)!
         
         let book = try XMLDecoder().decode(BookOption.self, from: data)
@@ -170,11 +149,9 @@ final class XMLDecoderTests: XCTestCase {
         XCTAssertEqual(user.alias, s_strOption)
         XCTAssertEqual(user.name, s_str)
         XCTAssertEqual(user.age, s_intOption)
-        
     }
     
     func testOptionNestedContainerAllAttr() throws {
-        
         let data = bookXMLStrAllAttr.data(using: .utf8)!
         
         let book = try XMLDecoder().decode(BookAllAttr.self, from: data)
@@ -187,11 +164,9 @@ final class XMLDecoderTests: XCTestCase {
         XCTAssertNil(user.alias)
         XCTAssertEqual(user.name, s_str)
         XCTAssertNil(user.age)
-
     }
     
     func testOptionNestedContainerNoOption() throws {
-        
         let data = bookXMLStrNoOption.data(using: .utf8)!
         
         let book = try XMLDecoder().decode(BookOption.self, from: data)
@@ -203,11 +178,9 @@ final class XMLDecoderTests: XCTestCase {
         XCTAssertNil(user.alias)
         XCTAssertEqual(user.name, s_str)
         XCTAssertNil(user.age)
-        
     }
     
     func testNestedUnkeyedContainer() throws {
-        
         // 下面两个都可以成功解析
         let data = userBookXMLStrNormal.data(using: .utf8)!
 //        let data = userBookXMLStrDic.data(using: .utf8)!
@@ -227,11 +200,9 @@ final class XMLDecoderTests: XCTestCase {
         XCTAssertEqual(secondOwner.alias, s_strOption)
         XCTAssertEqual(secondOwner.name, s_str)
         XCTAssertEqual(secondOwner.age, s_intOption)
-        
     }
     
     func testNestedUnkeyedContainerDic() throws {
-
         let data = userBookXMLStrDic.data(using: .utf8)!
         
         let userBook = try XMLDecoder().decode(UserBookDic.self, from: data)
@@ -249,12 +220,10 @@ final class XMLDecoderTests: XCTestCase {
         XCTAssertEqual(secondOwner.alias, s_strOption)
         XCTAssertEqual(secondOwner.name, s_str)
         XCTAssertEqual(secondOwner.age, s_intOption)
-
     }
     
     
     func testOptionNestedUnkeyedContainer() throws {
-        
         let data = userBookXMLStrNormal.data(using: .utf8)!
         
         let userBook = try XMLDecoder().decode(UserBookOption.self, from: data)
@@ -272,11 +241,9 @@ final class XMLDecoderTests: XCTestCase {
         XCTAssertEqual(secondOwner.alias, s_strOption)
         XCTAssertEqual(secondOwner.name, s_str)
         XCTAssertEqual(secondOwner.age, s_intOption)
-        
     }
-        
+
     func testOptionNestedUnkeyedContainerNoOption() throws {
-        
         let data = userBookXMLStrNormal.data(using: .utf8)!
         
         let userBook = try XMLDecoder().decode(UserBookOption.self, from: data)
@@ -294,11 +261,9 @@ final class XMLDecoderTests: XCTestCase {
         XCTAssertEqual(secondOwner.alias, s_strOption)
         XCTAssertEqual(secondOwner.name, s_str)
         XCTAssertEqual(secondOwner.age, s_intOption)
-        
     }
     
     func testOptionSingleContainerAllAttr() throws {
-        
         let data = userBookXMLStrAllAttr.data(using: .utf8)!
         
         let userBook = try XMLDecoder().decode(UserBookAllAttr.self, from: data)
@@ -312,14 +277,12 @@ final class XMLDecoderTests: XCTestCase {
         XCTAssertEqual(firstBook.alias, s_strOption)
         XCTAssertEqual(secondBook.id, s_int)
         XCTAssertNil(secondBook.alias)
-
     }
     
     
     // MAKR: - Inherit
     
     func testInherit() throws {
-        
         let data = squareXMLStr.data(using: .utf8)!
         
         let square = try XMLDecoder().decode(Square.self, from: data)
@@ -328,11 +291,9 @@ final class XMLDecoderTests: XCTestCase {
         XCTAssertEqual(square.name, s_str)
         XCTAssertEqual(square.size, s_int)
         XCTAssertEqual(square.commonName, s_strOption)
-        
     }
     
     func testNSInheritWithSupper() throws {
-        
         let data = squareXMLStr.data(using: .utf8)!
         
         let square = try XMLDecoder().decode(NSSquare.self, from: data)
@@ -377,25 +338,24 @@ final class XMLDecoderTests: XCTestCase {
     
     
     func testRealData() throws {
-        
-        struct Message : Codable {
-            var sid : String
+        struct Message: Codable {
+            var sid: String
 //            var dateCreated : Date
 //            var dateUpdated : Date
 //            var dateSent : Date
-            var accountSid : String
-            var to : String
-            var from : String
-            var body : String
-            var status : String
-            var numSegments : Int
-            var numMedia : Int
-            var direction : String
-            var uri : String
+            var accountSid: String
+            var to: String
+            var from: String
+            var body: String
+            var status: String
+            var numSegments: Int
+            var numMedia: Int
+            var direction: String
+            var uri: String
         }
         
-        struct Response : Codable {
-            var message : Message
+        struct Response: Codable {
+            var message: Message
         }
         
         let str = """
@@ -407,5 +367,4 @@ final class XMLDecoderTests: XCTestCase {
         
         XCTAssertEqual(response.message.sid, "SM2937db4f67a44d708a3f4ab2cccc01ff")
     }
-    
 }

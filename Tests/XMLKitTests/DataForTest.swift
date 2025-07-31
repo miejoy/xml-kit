@@ -1,6 +1,6 @@
 //
 //  DataForTest.swift
-//  
+//
 //
 //  Created by 黄磊 on 2020-03-22.
 //
@@ -8,7 +8,7 @@
 import Foundation
 import XMLKit
 
-internal struct XMLKey : CodingKey {
+internal struct XMLKey: CodingKey {
     var stringValue: String
     var intValue: Int?
 
@@ -33,15 +33,14 @@ internal struct XMLKey : CodingKey {
     }
 }
 
-struct User : Codable {
+struct User: Codable {
+    var id: Int
     
-    var id : Int
+    var alias: String?
     
-    var alias : String?
+    var name: String
     
-    var name : String
-    
-    var age : Int?
+    var age: Int?
     
     init(id: Int, name: String) {
         self.id = id
@@ -49,49 +48,41 @@ struct User : Codable {
     }
 }
 
-struct UserAttr : Codable {
+struct UserAttr: Codable {
+    @Attr var id: Int
     
-    @Attr var id : Int
+    @Attr var alias: String?
     
-    @Attr var alias : String?
+    @Attr var name: String
     
-    @Attr var name : String
-    
-    @Attr var age : Int?
-    
+    @Attr var age: Int?
 }
 
-struct UserPlaintext : Codable {
+struct UserPlaintext: Codable {
+    @Attr var id: Int
     
-    @Attr var id : Int
-    
-    @Attr var alias : String?
+    @Attr var alias: String?
         
-    @Plaintext var content : String
-    
+    @Plaintext var content: String
 }
 
-struct UserPlaintextOption : Codable {
+struct UserPlaintextOption: Codable {
+    @Attr var id: Int
     
-    @Attr var id : Int
-    
-    @Attr var alias : String?
+    @Attr var alias: String?
         
-    @Plaintext var content : String?
-    
+    @Plaintext var content: String?
 }
 
-struct UserBrothers : Codable {
+struct UserBrothers: Codable {
+    @Attr var id: Int
     
-    @Attr var id : Int
-    
-    var name : String
+    var name: String
         
-    @Brothers var brothers : [UserMix]
-    
+    @Brothers var brothers: [UserMix]
 }
 
-//struct UserBrothersOption : Codable {
+// struct UserBrothersOption : Codable {
 //
 //    @Attr var id : Int
 //
@@ -99,116 +90,96 @@ struct UserBrothers : Codable {
 //
 //    @Brothers var brothers : [UserMix]?
 //
-//}
+// }
 
-struct UserMix : Codable {
+struct UserMix: Codable {
+    @Attr var id: Int
     
-    @Attr var id : Int
+    @Attr var alias: String?
     
-    @Attr var alias : String?
+    var name: String
     
-    var name : String
-    
-    var age : Int?
+    var age: Int?
 }
 
 
 // MARK: - Container
 
-struct Book : Codable {
+struct Book: Codable {
+    @Attr var id: Int
     
-    @Attr var id : Int
+    var name: String
     
-    var name : String
-    
-    var owner : UserMix
-
+    var owner: UserMix
 }
 
-struct BoolAttr : Codable {
+struct BoolAttr: Codable {
+    @Attr var id: Int
     
-    @Attr var id : Int
-    
-    @Attr var alias : String?
+    @Attr var alias: String?
 }
 
 
-
-struct BookOption : Codable {
+struct BookOption: Codable {
+    @Attr var id: Int
     
-    @Attr var id : Int
+    var name: String
     
-    var name : String
-    
-    var owner : UserMix?
-    
+    var owner: UserMix?
 }
 
-struct BookAllAttr : Codable {
+struct BookAllAttr: Codable {
+    @Attr var id: Int
     
-    @Attr var id : Int
+    var name: String
     
-    var name : String
-    
-    var owner : UserAttr?
-    
+    var owner: UserAttr?
 }
 
-struct UserBook : Codable {
+struct UserBook: Codable {
+    @Attr var id: Int
     
-    @Attr var id : Int
+    var name: String
     
-    var name : String
-    
-    var books : [Book]
-    
+    var books: [Book]
 }
 
-struct UserBookOption : Codable {
+struct UserBookOption: Codable {
+    @Attr var id: Int
     
-    @Attr var id : Int
+    var name: String
     
-    var name : String
-    
-    var books : [Book]?
-    
+    var books: [Book]?
 }
 
-struct UserBookDic : Codable {
+struct UserBookDic: Codable {
+    @Attr var id: Int
     
-    @Attr var id : Int
+    var name: String
     
-    var name : String
-    
-    var books : [String:Book]
-    
+    var books: [String: Book]
 }
 
-struct UserBookAllAttr : Codable {
+struct UserBookAllAttr: Codable {
+    @Attr var id: Int
     
-    @Attr var id : Int
+    var name: String
     
-    var name : String
-    
-    var books : [BoolAttr?]
-    
+    var books: [BoolAttr?]
 }
 
-class Shape : Codable {
+class Shape: Codable {
+    @Attr var id: Int
     
-    @Attr var id : Int
-    
-    var name : String = ""
-    
+    var name: String = ""
 }
 
 class Square: Shape {
+    @Attr var size: Int
     
-    @Attr var size : Int
+    var commonName: String
     
-    var commonName : String
-    
-    enum CodingKeys : String, CodingKey {
+    enum CodingKeys: String, CodingKey {
         case size
         case commonName
     }
@@ -218,7 +189,6 @@ class Square: Shape {
         self.commonName = try container.decode(String.self, forKey: .commonName)
         self._size = try container.decode(Attr<Int>.self, forKey: .size)
         try super.init(from: decoder)
-        
     }
     
     override func encode(to encoder: Encoder) throws {
@@ -227,23 +197,20 @@ class Square: Shape {
         try container.encode(_size, forKey: .size)
         try super.encode(to: encoder)
     }
-    
 }
 
 class NSShape: NSObject, Codable {
+    @Attr var id: Int
     
-    @Attr var id : Int
-    
-    var name : String
+    var name: String
 }
 
 class NSSquare: NSShape {
+    @Attr var size: Int
 
-    @Attr var size : Int
-
-    var commonName : String = ""
+    var commonName: String = ""
     
-    enum CodingKeys : String, CodingKey {
+    enum CodingKeys: String, CodingKey {
         case size
         case commonName
     }
@@ -254,7 +221,6 @@ class NSSquare: NSShape {
         self._size = try container.decode(Attr<Int>.self, forKey: .size)
         // 这里因为container 中没有 super， 所以下面调用与 super.init(from: decoder) 是一致的
         try super.init(from: container.superDecoder())
-        
     }
     
     override func encode(to encoder: Encoder) throws {
@@ -265,74 +231,63 @@ class NSSquare: NSShape {
         try super.encode(to: container.superEncoder())
 //        try super.encode(to: encoder)
     }
-    
 }
 
 
 // MARK: - Strategy
 
-struct DateStrategy : Codable {
+struct DateStrategy: Codable {
+    @Attr var createTime: Date
     
-    @Attr var createTime : Date
+    @Attr var updateTime: Date?
     
-    @Attr var updateTime : Date?
+    var createDate: Date
     
-    var createDate : Date
-    
-    var updateDate : Date?
-    
+    var updateDate: Date?
 }
 
-struct DataStrategy : Codable {
+struct DataStrategy: Codable {
+    @Attr var dataAttr: Data
     
-    @Attr var dataAttr : Data
+    @Attr var dataAttrOption: Data?
     
-    @Attr var dataAttrOption : Data?
+    var data: Data
     
-    var data : Data
-    
-    var dataOption : Data?
-    
+    var dataOption: Data?
 }
 
-struct FloatStrategy : Codable {
+struct FloatStrategy: Codable {
+    @Attr var floatAttr: Float
     
-    @Attr var floatAttr : Float
+    @Attr var floatAttrOption: Float?
     
-    @Attr var floatAttrOption : Float?
+    var float: Float
     
-    var float : Float
-    
-    var floatOption : Float?
-    
+    var floatOption: Float?
 }
 
-struct DoubleStrategy : Codable {
+struct DoubleStrategy: Codable {
+    @Attr var floatAttr: Double
     
-    @Attr var floatAttr : Double
+    @Attr var floatAttrOption: Double?
     
-    @Attr var floatAttrOption : Double?
+    var float: Double
     
-    var float : Double
-    
-    var floatOption : Double?
-    
+    var floatOption: Double?
 }
 
 // MARK: - Key
 
-struct ElementName : Codable {
+struct ElementName: Codable {
+    var elementName: Int
     
-    var elementName : Int
-    
-    var elementNameOption : Int?
+    var elementNameOption: Int?
 }
 
-struct AttrName : Codable {
+struct AttrName: Codable {
+    @Attr var attrName: String
     
-    @Attr var attrName : String
-    
-    @Attr var attrNameOption : String?
+    @Attr var attrNameOption: String?
 }
 
 // MARK: - Cover More
@@ -365,16 +320,16 @@ struct AllCover: Codable {
     var string: String
 }
 
-// MARK: ---
+// MARK: - --
 
-let s_bool : Bool = true
-let s_int : Int = 1
-let s_intOption : Int = 2
-let s_str : String = "asd"
-let s_strOption : String = "qwe"
-let s_date : Date = Date()
-let s_dateOption : Date = Date().addingTimeInterval(10)
-var s_customDateFormatter : DateFormatter {
+let s_bool: Bool = true
+let s_int: Int = 1
+let s_intOption: Int = 2
+let s_str: String = "asd"
+let s_strOption: String = "qwe"
+let s_date: Date = Date()
+let s_dateOption: Date = Date().addingTimeInterval(10)
+var s_customDateFormatter: DateFormatter {
     let dft = DateFormatter()
     dft.dateFormat = "yyyy-MM-dd HH:mm:ss Z"
     return dft
@@ -384,9 +339,9 @@ var s_iso8601Formatter: ISO8601DateFormatter = {
     formatter.formatOptions = .withInternetDateTime
     return formatter
 }()
-let s_data : Data = "asd".data(using: .utf8)!
-let s_dataOption : Data = "qwe".data(using: .utf8)!
-let s_floatNormal : Float = 1.1
+let s_data: Data = "asd".data(using: .utf8)!
+let s_dataOption: Data = "qwe".data(using: .utf8)!
+let s_floatNormal: Float = 1.1
 let s_floatPositiveInfinity = "Positive Infinity"
 let s_floatNegativeInfinity = "Negative Infinity"
 let s_floatNan = "Nan"

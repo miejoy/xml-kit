@@ -1,17 +1,16 @@
 //
 //  _XMLAttrEncoder.swift
-//  
+//
 //
 //  Created by 黄磊 on 2020-03-23.
 //
 
-internal class _XMLAttrEncoder : Encoder {
-    
+internal class _XMLAttrEncoder: Encoder {
     // MARK: Properties
 
-    let encoder : _XMLEncoder
-    let key : String
-    let element : _XMLElement
+    let encoder: _XMLEncoder
+    let key: String
+    let element: _XMLElement
     
 
     /// Options set on the top-level decoder.
@@ -21,7 +20,7 @@ internal class _XMLAttrEncoder : Encoder {
     internal(set) public var codingPath: [CodingKey]
 
     /// Contextual user-provided information for use during encoding.
-    var userInfo: [CodingUserInfoKey : Any] {
+    var userInfo: [CodingUserInfoKey: Any] {
         return self.options.userInfo
     }
 
@@ -38,7 +37,7 @@ internal class _XMLAttrEncoder : Encoder {
 
     // MARK: - Decoder Methods
     
-    func container<Key>(keyedBy type: Key.Type) -> KeyedEncodingContainer<Key> where Key : CodingKey {
+    func container<Key>(keyedBy type: Key.Type) -> KeyedEncodingContainer<Key> where Key: CodingKey {
         fatalError("Attr encoder do not have container")
     }
     
@@ -49,14 +48,12 @@ internal class _XMLAttrEncoder : Encoder {
     func singleValueContainer() -> SingleValueEncodingContainer {
         return self
     }
-
 }
 
 
 // MARK: - SingleValueEncodingContainer
 
-extension _XMLAttrEncoder : SingleValueEncodingContainer {
-    
+extension _XMLAttrEncoder: SingleValueEncodingContainer {
     func encodeNil() throws {
         self.element.attributes[key] = nil
     }
@@ -117,9 +114,7 @@ extension _XMLAttrEncoder : SingleValueEncodingContainer {
         self.element.attributes[key] = self.encoder.box(value, with: key).value
     }
     
-    func encode<T>(_ value: T) throws where T : Encodable {
+    func encode<T>(_ value: T) throws where T: Encodable {
         self.element.attributes[key] = try self.encoder.box(value, with: key).value
     }
-    
 }
-

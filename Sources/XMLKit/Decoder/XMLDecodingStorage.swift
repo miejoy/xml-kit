@@ -1,6 +1,6 @@
 //
 //  _XMLDecodingStorage.swift
-//  
+//
 //
 //  Created by 黄磊 on 2020-03-22.
 //
@@ -10,8 +10,6 @@
 /// 使用堆的方式保存正在处理的元素，一般 push 和 popElement 是成对出现的。
 /// push 之后对应类型会通过 singleValueContainer 读取 topElement 继续进行解码
 internal struct _XMLDecodingStorage {
-
-    
     private(set) internal var elements: [_XMLElement] = []
 
     // MARK: - Init

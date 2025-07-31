@@ -1,6 +1,6 @@
 //
 //  XMLEncoder.swift
-//  
+//
 //
 //  Created by 黄磊 on 2020-03-21.
 //
@@ -11,10 +11,8 @@ import Combine
 #endif
 
 open class XMLEncoder {
-    
     /// The formatting of the output XML data.
-    public struct OutputFormatting : OptionSet {
-
+    public struct OutputFormatting: OptionSet {
         /// The format's default value.
         public let rawValue: UInt
 
@@ -37,7 +35,6 @@ open class XMLEncoder {
 
     /// The strategy to use for encoding `Date` values.
     public enum DateEncodingStrategy {
-
         /// Defer to `Date` for choosing an encoding. This is the default strategy.
         case deferredToDate
 
@@ -61,7 +58,6 @@ open class XMLEncoder {
 
     /// The strategy to use for encoding `Data` values.
     public enum DataEncodingStrategy {
-
         /// Defer to `Data` for choosing an encoding.
         case deferredToData
 
@@ -76,7 +72,6 @@ open class XMLEncoder {
 
     /// The strategy to use for non-JSON-conforming floating-point values (IEEE 754 infinity and NaN).
     public enum NonConformingFloatEncodingStrategy {
-
         /// Throw upon encountering non-conforming values. This is the default strategy.
         case `throw`
 
@@ -86,7 +81,6 @@ open class XMLEncoder {
 
     /// The strategy to use for automatically changing the value of keys before encoding.
     public enum KeyEncodingStrategy {
-
         /// Use the keys specified by each type. This is the default strategy.
         case useDefaultKeys
 
@@ -113,13 +107,12 @@ open class XMLEncoder {
             guard !stringKey.isEmpty else { return stringKey }
             
             return stringKey.first!.uppercased() + stringKey.dropFirst()
-            
         }
         
         internal static func _convertToSnakeCase(_ stringKey: String) -> String {
             guard !stringKey.isEmpty else { return stringKey }
         
-            var words : [Range<String.Index>] = []
+            var words: [Range<String.Index>] = []
             // The general idea of this algorithm is to split words on transition from lower to upper case, then on transition of >1 upper case characters to lowercase
             //
             // myProperty -> my_property
@@ -168,7 +161,6 @@ open class XMLEncoder {
     
     /// 编码数组是，对应 index 标签名称
     public enum ArrayIndexKeyStrategy {
-
         /// 使用默认 Index 前缀
         case defaultIndexPrefix
         
@@ -209,24 +201,24 @@ open class XMLEncoder {
     open var attrNameEncodingStrategy: KeyEncodingStrategy = .useDefaultKeys
     
     /// The strategy to use for encoding array index. Defaults to `.defaultIndexPrefix`.
-    open var arrayIndexKeyStrategy : ArrayIndexKeyStrategy = .defaultIndexPrefix
+    open var arrayIndexKeyStrategy: ArrayIndexKeyStrategy = .defaultIndexPrefix
     
     /// Contextual user-provided information for use during encoding.
-    open var userInfo: [CodingUserInfoKey : Any] = [:]
+    open var userInfo: [CodingUserInfoKey: Any] = [:]
 
     /// Initializes `self` with default strategies.
     public init() {
     }
     
     internal struct _Options {
-        let outputFormatting : OutputFormatting
+        let outputFormatting: OutputFormatting
         let dateEncodingStrategy: DateEncodingStrategy
         let dataEncodingStrategy: DataEncodingStrategy
         let nonConformingFloatEncodingStrategy: NonConformingFloatEncodingStrategy
         let elementNameEncodingStrategy: KeyEncodingStrategy
         let attrNameEncodingStrategy: KeyEncodingStrategy
         let arrayIndexKeyStrategy: ArrayIndexKeyStrategy
-        let userInfo: [CodingUserInfoKey : Any]
+        let userInfo: [CodingUserInfoKey: Any]
     }
 
     /// The options set on the top-level encoder.
@@ -243,12 +235,13 @@ open class XMLEncoder {
 
     /// Encodes the given top-level value and returns its XML representation.
 
-    open func encode<T : Encodable>(_ value: T, withRootKey rootKey: String, header: XMLHeader? = nil) throws -> Data {
+    open func encode<T: Encodable>(_ value: T, withRootKey rootKey: String, header: XMLHeader? = nil) throws -> Data {
         let encoder = _XMLEncoder(options: self.options, with: rootKey)
 
         guard let topLevel = try encoder.box_(value, with: rootKey) else {
-            throw EncodingError.invalidValue(value,
-                                             EncodingError.Context(codingPath: [], debugDescription: "Top-level \(T.self) did not encode any values."))
+            throw EncodingError.invalidValue(value, EncodingError.Context(
+                codingPath: [],
+                debugDescription: "Top-level \(T.self) did not encode any values."))
         }
 
         let string = topLevel.toXMLString(with: header,
@@ -260,11 +253,10 @@ open class XMLEncoder {
 
 #if canImport(Combine)
 @available(OSX 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-extension XMLEncoder : TopLevelEncoder {
-    
+extension XMLEncoder: TopLevelEncoder {
     public typealias Output = Data
     
-    public func encode<T>(_ value: T) throws -> Data where T : Encodable {
+    public func encode<T>(_ value: T) throws -> Data where T: Encodable {
         return try encode(value, withRootKey: "Root", header: nil)
     }
 }
@@ -274,40 +266,36 @@ extension XMLEncoder : TopLevelEncoder {
 // MARK: - _XMLEncoder
 
 /// 实际使用 XML 编码器
-internal class _XMLEncoder : Encoder {
-    
-    let options : XMLEncoder._Options
+internal class _XMLEncoder: Encoder {
+    let options: XMLEncoder._Options
     
     var codingPath: [CodingKey]
     
-    var storage : _XMLEncodingStorage
+    var storage: _XMLEncodingStorage
     
-    var userInfo: [CodingUserInfoKey : Any]
+    var userInfo: [CodingUserInfoKey: Any]
     
-    var topElement : _XMLElement {
+    var topElement: _XMLElement {
         return storage.topElement
     }
     
-    init(options: XMLEncoder._Options, with rootKey:String, codingPath: [CodingKey] = []) {
+    init(options: XMLEncoder._Options, with rootKey: String, codingPath: [CodingKey] = []) {
         self.options = options
         self.storage = _XMLEncodingStorage()
         self.codingPath = codingPath
         self.userInfo = [:]
     }
     
-    func container<Key>(keyedBy type: Key.Type) -> KeyedEncodingContainer<Key> where Key : CodingKey {
-        
+    func container<Key>(keyedBy type: Key.Type) -> KeyedEncodingContainer<Key> where Key: CodingKey {
         guard let topElement = self.storage.elements.last else {
             preconditionFailure("Attempt to get element for new container when no element found.")
         }
 
         let container = _XMLKeyedEncodingContainer<Key>(encoder: self, element: topElement)
         return KeyedEncodingContainer(container)
-        
     }
     
     func unkeyedContainer() -> UnkeyedEncodingContainer {
-        
         guard let topElement = self.storage.elements.last else {
             preconditionFailure("Attempt to get element for new container when no element found.")
         }
@@ -318,13 +306,11 @@ internal class _XMLEncoder : Encoder {
     func singleValueContainer() -> SingleValueEncodingContainer {
         return self
     }
-    
 }
 
 // MARK: - SingleValueEncodingContainer
 
-extension _XMLEncoder : SingleValueEncodingContainer {
-    
+extension _XMLEncoder: SingleValueEncodingContainer {
     private func assertCanEncodeNewValue() {
         precondition(self.storage.count > 0, "Attempt to encode value through single value container when previously value already encoded.")
     }
@@ -404,12 +390,11 @@ extension _XMLEncoder : SingleValueEncodingContainer {
         topElement.value = try self.box(value, with: "").value
     }
 
-    public func encode<T : Encodable>(_ value: T) throws {
+    public func encode<T: Encodable>(_ value: T) throws {
         assertCanEncodeNewValue()
         let newElement = try self.box(value, with: "")
         topElement.value = newElement.value
         topElement.children += newElement.children
         topElement.attributes.merge(newElement.attributes) { $1 }
     }
-    
 }

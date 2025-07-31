@@ -1,6 +1,6 @@
 //
 //  XMLParserTests.swift
-//  
+//
 //
 //  Created by 黄磊 on 2020-03-21.
 //
@@ -9,9 +9,7 @@ import XCTest
 @testable import XMLKit
 
 final class XMLParserTests: XCTestCase {
-    
     func testParse() throws {
-        
         let data = userXMLStr.data(using: .utf8)!
         
         let rootElement = try _XMLParser.parse(with: data)
@@ -23,11 +21,9 @@ final class XMLParserTests: XCTestCase {
         XCTAssertEqual(rootElement.children.first?.value, s_str)
         XCTAssertEqual(rootElement.children.last?.name, "age")
         XCTAssertEqual(rootElement.children.last?.value, s_intOption.description)
-        
     }
     
     func testDecoder() throws {
-        
         let data = userXMLStr.data(using: .utf8)!
         let decoder = XMLDecoder()
         let user = try decoder.decode(UserMix.self, from: data)
@@ -39,7 +35,6 @@ final class XMLParserTests: XCTestCase {
     }
 
     func testAttrJSONEncoderAndJSONDecoder() throws {
-        
         let data = userStr.data(using: .utf8)!
         let decoder = JSONDecoder()
         let tmpUser = try decoder.decode(UserMix.self, from: data)
@@ -50,13 +45,8 @@ final class XMLParserTests: XCTestCase {
         XCTAssertEqual(user.alias, s_strOption)
         XCTAssertEqual(user.name, s_str)
         XCTAssertEqual(user.age, s_intOption)
-        
     }
-    
 }
-
-
-
 
 
 let booksXMLStr = """

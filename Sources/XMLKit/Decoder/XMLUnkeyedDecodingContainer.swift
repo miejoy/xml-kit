@@ -1,14 +1,13 @@
 //
 //  _XMLUnkeyedDecodingContainer.swift
-//  
+//
 //
 //  Created by 黄磊 on 2020-03-22.
 //
 
 import Foundation
 
-internal struct _XMLUnkeyedDecodingContainer : UnkeyedDecodingContainer  {
-            
+internal struct _XMLUnkeyedDecodingContainer: UnkeyedDecodingContainer {
     private let decoder: _XMLDecoder
     private let container: [_XMLElement]
     
@@ -33,7 +32,9 @@ internal struct _XMLUnkeyedDecodingContainer : UnkeyedDecodingContainer  {
         
     mutating func decodeNil() throws -> Bool {
         guard !self.isAtEnd else {
-            throw DecodingError.valueNotFound(Any?.self, DecodingError.Context(codingPath: self.decoder.codingPath + [_XMLKey(index: self.currentIndex)], debugDescription: "Unkeyed container is at end."))
+            throw DecodingError.valueNotFound(Any?.self, DecodingError.Context(
+                codingPath: self.decoder.codingPath + [_XMLKey(index: self.currentIndex)],
+                debugDescription: "Unkeyed container is at end."))
         }
         
         let element = self.container[self.currentIndex]
@@ -268,7 +269,7 @@ internal struct _XMLUnkeyedDecodingContainer : UnkeyedDecodingContainer  {
         return decoded
     }
     
-    mutating func decode<T>(_ type: T.Type) throws -> T where T : Decodable {
+    mutating func decode<T>(_ type: T.Type) throws -> T where T: Decodable {
         guard !self.isAtEnd else {
             throw DecodingError._valueNotFoundReachEnd(at: self.decoder.codingPath, with: type, index: self.currentIndex)
         }
@@ -284,15 +285,14 @@ internal struct _XMLUnkeyedDecodingContainer : UnkeyedDecodingContainer  {
         return decoded
     }
     
-    mutating func nestedContainer<NestedKey>(keyedBy type: NestedKey.Type) throws -> KeyedDecodingContainer<NestedKey> where NestedKey : CodingKey {
-        
+    mutating func nestedContainer<NestedKey>(keyedBy type: NestedKey.Type) throws -> KeyedDecodingContainer<NestedKey> where NestedKey: CodingKey {
         self.decoder.codingPath.append(_XMLKey(index: self.currentIndex))
         defer { self.decoder.codingPath.removeLast() }
 
         guard !self.isAtEnd else {
-            throw DecodingError.valueNotFound(UnkeyedDecodingContainer.self,
-                                              DecodingError.Context(codingPath: self.codingPath,
-                                                                    debugDescription: "Cannot get nested keyed container -- unkeyed container is at end."))
+            throw DecodingError.valueNotFound(UnkeyedDecodingContainer.self, DecodingError.Context(
+                codingPath: self.codingPath,
+                debugDescription: "Cannot get nested keyed container -- unkeyed container is at end."))
         }
 
         let element = self.container[self.currentIndex]
@@ -304,14 +304,13 @@ internal struct _XMLUnkeyedDecodingContainer : UnkeyedDecodingContainer  {
     }
     
     mutating func nestedUnkeyedContainer() throws -> UnkeyedDecodingContainer {
-        
         self.decoder.codingPath.append(_XMLKey(index: self.currentIndex))
         defer { self.decoder.codingPath.removeLast() }
 
         guard !self.isAtEnd else {
-            throw DecodingError.valueNotFound(UnkeyedDecodingContainer.self,
-                                              DecodingError.Context(codingPath: self.codingPath,
-                                                                    debugDescription: "Cannot get nested unkeyed container -- unkeyed container is at end."))
+            throw DecodingError.valueNotFound(UnkeyedDecodingContainer.self, DecodingError.Context(
+                codingPath: self.codingPath,
+                debugDescription: "Cannot get nested unkeyed container -- unkeyed container is at end."))
         }
 
         let element = self.container[self.currentIndex]
@@ -322,7 +321,6 @@ internal struct _XMLUnkeyedDecodingContainer : UnkeyedDecodingContainer  {
     }
     
     mutating func superDecoder() throws -> Decoder {
-        
         self.decoder.codingPath.append(_XMLKey(index: self.currentIndex))
         defer { self.decoder.codingPath.removeLast() }
 
@@ -335,6 +333,5 @@ internal struct _XMLUnkeyedDecodingContainer : UnkeyedDecodingContainer  {
         let element = self.container[self.currentIndex]
         self.currentIndex += 1
         return _XMLDecoder(rootElement: element, at: self.decoder.codingPath, options: self.decoder.options)
-        
     }
 }

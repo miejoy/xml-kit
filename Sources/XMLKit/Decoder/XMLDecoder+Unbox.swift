@@ -1,6 +1,6 @@
 //
 //  _XMLDecoder+Unbox.swift
-//  
+//
 //
 //  Created by 黄磊 on 2020-03-22.
 //
@@ -10,9 +10,7 @@ import Foundation
 
 /// 扩展解码中的数据解包方法
 extension _XMLDecoder {
-    
     internal func unbox(_ element: _XMLElement, as type: Bool.Type) throws -> Bool? {
-        
         guard let value = element.value else { return nil }
         
         if value == "true" || value == "1" {
@@ -25,7 +23,6 @@ extension _XMLDecoder {
     }
     
     internal func unbox(_ element: _XMLElement, as type: Int.Type) throws -> Int? {
-
         guard let string = element.value else { return nil }
         
         guard let value = Int(string) else {
@@ -126,7 +123,6 @@ extension _XMLDecoder {
     }
     
     internal func unbox(_ element: _XMLElement, as type: Float.Type) throws -> Float? {
-        
         guard let string = element.value else { return nil }
 
         if let value = Float(string) {
@@ -145,7 +141,6 @@ extension _XMLDecoder {
     }
     
     internal func unbox(_ element: _XMLElement, as type: Double.Type) throws -> Double? {
-        
         guard let string = element.value else { return nil }
         
         if let double = Double(string) {
@@ -164,7 +159,6 @@ extension _XMLDecoder {
     }
     
     internal func unbox(_ element: _XMLElement, as type: String.Type) throws -> String? {
-        
         guard let string = element.value else {
             throw DecodingError._typeMismatch(at: codingPath, expectation: type, reality: "")
         }
@@ -173,7 +167,6 @@ extension _XMLDecoder {
     }
     
     internal func unbox(_ element: _XMLElement, as type: Date.Type) throws -> Date? {
-        
         guard let string = element.value else { return nil }
         
         switch self.options.dateDecodingStrategy {
@@ -191,14 +184,18 @@ extension _XMLDecoder {
             
         case .iso8601:
             guard let date = s_iso8601Formatter.date(from: string) else {
-                throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: codingPath, debugDescription: "Expected date string to be ISO8601-formatted."))
+                throw DecodingError.dataCorrupted(DecodingError.Context(
+                    codingPath: codingPath,
+                    debugDescription: "Expected date string to be ISO8601-formatted."))
             }
             
             return date
             
         case .formatted(let formatter):
             guard let date = formatter.date(from: string) else {
-                throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: codingPath, debugDescription: "Date string does not match format expected by formatter."))
+                throw DecodingError.dataCorrupted(DecodingError.Context(
+                    codingPath: codingPath,
+                    debugDescription: "Date string does not match format expected by formatter."))
             }
             
             return date
@@ -211,7 +208,6 @@ extension _XMLDecoder {
     }
     
     internal func unbox(_ element: _XMLElement, as type: Data.Type) throws -> Data? {
-        
         guard let string = element.value else { return nil }
         
         switch self.options.dataDecodingStrategy {
@@ -223,7 +219,9 @@ extension _XMLDecoder {
         case .base64:
             
             guard let data = Data(base64Encoded: string) else {
-                throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: self.codingPath, debugDescription: "Encountered Data is not valid Base64."))
+                throw DecodingError.dataCorrupted(DecodingError.Context(
+                    codingPath: self.codingPath,
+                    debugDescription: "Encountered Data is not valid Base64."))
             }
             
             return data
@@ -236,12 +234,12 @@ extension _XMLDecoder {
     }
     
     internal func unbox(_ element: _XMLElement, as type: Decimal.Type) throws -> Decimal? {
-        
         let doubleValue = try self.unbox(element, as: Double.self)!
         return Decimal(doubleValue)
     }
     
-    internal func unbox<T : Decodable>(_ element: _XMLElement, as type: T.Type) throws -> T? {
+    // swiftlint:disable force_cast
+    internal func unbox<T: Decodable>(_ element: _XMLElement, as type: T.Type) throws -> T? {
         let decoded: T
         if type == Date.self || type == NSDate.self {
             guard let date = try self.unbox(element, as: Date.self) else { return nil }
@@ -271,4 +269,6 @@ extension _XMLDecoder {
         
         return decoded
     }
+    
+    // swiftlint:enable force_cast
 }

@@ -1,6 +1,6 @@
 //
 //  File.swift
-//  
+//
 //
 //  Created by 黄磊 on 2020-03-25.
 //
@@ -8,16 +8,14 @@
 import Foundation
 
 protocol AnyPlaintext {
-    
 }
 
 /// 属性包装器，使用它包装的属性将于 XML 标签中的属性绑定
 @propertyWrapper
-public class Plaintext<Value:Codable> : Codable, AnyPlaintext {
-        
-    var value : Value?
+public class Plaintext<Value: Codable>: Codable, AnyPlaintext {
+    var value: Value?
     
-    public var wrappedValue : Value {
+    public var wrappedValue: Value {
         get {
             guard let value = self.value else {
                 fatalError("Cannot access field before it is initialized or fetched")
@@ -37,6 +35,7 @@ public class Plaintext<Value:Codable> : Codable, AnyPlaintext {
         let container = try decoder.singleValueContainer()
         if let valueType = Value.self as? _AnyOptionalType.Type {
             if container.decodeNil() {
+                // swiftlint:disable:next force_cast
                 self.wrappedValue = (valueType.nil as! Value)
             } else {
                 self.wrappedValue = try container.decode(Value.self)
@@ -50,5 +49,4 @@ public class Plaintext<Value:Codable> : Codable, AnyPlaintext {
         var container = encoder.singleValueContainer()
         try container.encode(self.wrappedValue)
     }
-    
 }

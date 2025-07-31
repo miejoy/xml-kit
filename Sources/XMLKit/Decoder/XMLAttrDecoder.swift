@@ -1,18 +1,17 @@
 //
 //  _XMLAttrDecoder.swift
-//  
+//
 //
 //  Created by 黄磊 on 2020-03-22.
 //
 
 /// 属性解码器
-internal class _XMLAttrDecoder : Decoder {
-    
+internal class _XMLAttrDecoder: Decoder {
     // MARK: Properties
 
-    let decoder : _XMLDecoder
-    let key : String
-    let content : String?
+    let decoder: _XMLDecoder
+    let key: String
+    let content: String?
     
     /// Options set on the top-level decoder.
     let options: XMLDecoder._Options
@@ -21,7 +20,7 @@ internal class _XMLAttrDecoder : Decoder {
     internal(set) public var codingPath: [CodingKey]
 
     /// Contextual user-provided information for use during encoding.
-    public var userInfo: [CodingUserInfoKey : Any] {
+    public var userInfo: [CodingUserInfoKey: Any] {
         return self.options.userInfo
     }
 
@@ -56,11 +55,12 @@ internal class _XMLAttrDecoder : Decoder {
 }
 
 
-extension _XMLAttrDecoder : SingleValueDecodingContainer {
-    
+extension _XMLAttrDecoder: SingleValueDecodingContainer {
     private func expectNonNil<T>(_ type: T.Type) throws {
         guard !self.decodeNil() else {
-            throw DecodingError.valueNotFound(type, DecodingError.Context(codingPath: self.codingPath, debugDescription: "Expected \(type) but found null value instead."))
+            throw DecodingError.valueNotFound(type, DecodingError.Context(
+                codingPath: self.codingPath,
+                debugDescription: "Expected \(type) but found null value instead."))
         }
     }
     
@@ -138,7 +138,7 @@ extension _XMLAttrDecoder : SingleValueDecodingContainer {
         return try self.decoder.unbox(_XMLElement(name: key, value: content), as: UInt64.self)!
     }
     
-    func decode<T>(_ type: T.Type) throws -> T where T : Decodable {
+    func decode<T>(_ type: T.Type) throws -> T where T: Decodable {
         try expectNonNil(T.self)
         return try self.decoder.unbox(_XMLElement(name: key, value: content), as: T.self)!
     }

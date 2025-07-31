@@ -1,14 +1,13 @@
 //
 //  _XMLUnkeyedEncodingContainer.swift
-//  
+//
 //
 //  Created by 黄磊 on 2020-03-23.
 //
 
 import Foundation
 
-internal struct _XMLUnkeyedEncodingContainer : UnkeyedEncodingContainer {
-    
+internal struct _XMLUnkeyedEncodingContainer: UnkeyedEncodingContainer {
     // MARK: Properties
 
     /// A reference to the encoder we're writing to.
@@ -68,7 +67,7 @@ internal struct _XMLUnkeyedEncodingContainer : UnkeyedEncodingContainer {
         self.container.children.append(try encoder.box(value, with: currentKey(type: type(of: value))))
     }
 
-    mutating func encode<T : Encodable>(_ value: T) throws {
+    mutating func encode<T: Encodable>(_ value: T) throws {
         self.encoder.codingPath.append(_XMLKey(index: self.count))
         defer { self.encoder.codingPath.removeLast() }
         self.container.children.append(try encoder.box(value, with: currentKey(type: type(of: value))))

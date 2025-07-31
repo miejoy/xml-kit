@@ -1,6 +1,6 @@
 //
 //  _XMLKeyedDecodingContainer.swift
-//  
+//
 //
 //  Created by 黄磊 on 2020-03-22.
 //
@@ -8,13 +8,12 @@
 import Foundation
 
 
-internal struct _XMLKeyedDecodingContainer<K : CodingKey> : KeyedDecodingContainerProtocol  {
-    
+internal struct _XMLKeyedDecodingContainer<K: CodingKey>: KeyedDecodingContainerProtocol {
     typealias Key = K
         
     private let decoder: _XMLDecoder
-    private let element : _XMLElement
-    private let container: [String : _XMLElement]
+    private let element: _XMLElement
+    private let container: [String: _XMLElement]
     
     var codingPath: [CodingKey]
     
@@ -22,7 +21,7 @@ internal struct _XMLKeyedDecodingContainer<K : CodingKey> : KeyedDecodingContain
         self.decoder = decoder
         self.codingPath = decoder.codingPath
         // 处理属性
-        var dicAttrs = [String:String]()
+        var dicAttrs = [String: String]()
         for attr in element.attributes {
             let aKey = decoder.options.attrNameDecodingStrategy.convertFrom(attr.key, path: (self.codingPath + [_XMLKey(stringValue: attr.key)!]))
             dicAttrs[aKey] = attr.value
@@ -30,8 +29,8 @@ internal struct _XMLKeyedDecodingContainer<K : CodingKey> : KeyedDecodingContain
         element.attributes = dicAttrs
         self.element = element
         // 读取 container
-        var container = [String:_XMLElement]()
-        var dicContainer = [String:[_XMLElement]]()
+        var container = [String: _XMLElement]()
+        var dicContainer = [String: [_XMLElement]]()
         for element in element.children {
             let aName = decoder.options.elementNameDecodingStrategy
                 .convertFrom(element.name, path: (self.codingPath + [_XMLKey(stringValue: element.name)!]))
@@ -267,7 +266,7 @@ internal struct _XMLKeyedDecodingContainer<K : CodingKey> : KeyedDecodingContain
         return value
     }
     
-    func decode<T>(_ type: T.Type, forKey key: K) throws -> T where T : Decodable {
+    func decode<T>(_ type: T.Type, forKey key: K) throws -> T where T: Decodable {
         if type is AnyAttr.Type {
             let value = element.attributes[key.stringValue]
             self.decoder.codingPath.append(key)
@@ -297,13 +296,19 @@ internal struct _XMLKeyedDecodingContainer<K : CodingKey> : KeyedDecodingContain
         return value
     }
     
-    func nestedContainer<NestedKey>(keyedBy type: NestedKey.Type, forKey key: K) throws -> KeyedDecodingContainer<NestedKey> where NestedKey : CodingKey {
-        
+    func nestedContainer<NestedKey>(
+        keyedBy type: NestedKey.Type,
+        forKey key: K
+    ) throws -> KeyedDecodingContainer<NestedKey> where NestedKey: CodingKey {
         self.decoder.codingPath.append(key)
         defer { self.decoder.codingPath.removeLast() }
         
         guard let element = self.container[key.stringValue] else {
-            throw DecodingError._keyNotFound(at: self.codingPath, with: key, strategy: self.decoder.options.elementNameDecodingStrategy, prevDesc: "Cannot get \(KeyedDecodingContainer<NestedKey>.self)")
+            throw DecodingError._keyNotFound(
+                at: self.codingPath,
+                with: key,
+                strategy: self.decoder.options.elementNameDecodingStrategy,
+                prevDesc: "Cannot get \(KeyedDecodingContainer<NestedKey>.self)")
         }
 
         let container = _XMLKeyedDecodingContainer<NestedKey>(decoder: self.decoder, element: element)
@@ -315,7 +320,11 @@ internal struct _XMLKeyedDecodingContainer<K : CodingKey> : KeyedDecodingContain
         defer { self.decoder.codingPath.removeLast() }
         
         guard let element = self.container[key.stringValue] else {
-            throw DecodingError._keyNotFound(at: self.codingPath, with: key, strategy: self.decoder.options.elementNameDecodingStrategy, prevDesc: "Cannot get UnkeyedDecodingContainer")
+            throw DecodingError._keyNotFound(
+                at: self.codingPath,
+                with: key,
+                strategy: self.decoder.options.elementNameDecodingStrategy,
+                prevDesc: "Cannot get UnkeyedDecodingContainer")
         }
 
         return _XMLUnkeyedDecodingContainer(decoder: self.decoder, elements: element.children)
@@ -333,9 +342,7 @@ internal struct _XMLKeyedDecodingContainer<K : CodingKey> : KeyedDecodingContain
         self.decoder.codingPath.append(key)
         defer { self.decoder.codingPath.removeLast() }
 
-        let element : _XMLElement = self.container[key.stringValue] ?? self.decoder.topElement
+        let element: _XMLElement = self.container[key.stringValue] ?? self.decoder.topElement
         return _XMLDecoder(rootElement: element, at: self.decoder.codingPath, options: self.decoder.options)
     }
-    
-    
 }

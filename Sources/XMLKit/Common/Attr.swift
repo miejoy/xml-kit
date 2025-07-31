@@ -1,6 +1,6 @@
 //
 //  Attr.swift
-//  
+//
 //
 //  Created by 黄磊 on 2020-03-21.
 //
@@ -9,16 +9,14 @@ import Foundation
 
 /// 任意属性协议，方便 Decoder 和 Encoder 操作
 protocol AnyAttr {
-    
 }
 
 /// 属性包装器，使用它包装的属性将于 XML 标签中的属性绑定
 @propertyWrapper
-public class Attr<Value:Codable> : Codable, AnyAttr {
-        
-    var value : Value?
+public class Attr<Value: Codable>: Codable, AnyAttr {
+    var value: Value?
     
-    public var wrappedValue : Value {
+    public var wrappedValue: Value {
         get {
             guard let value = self.value else {
                 fatalError("Cannot access field before it is initialized or fetched")
@@ -38,6 +36,7 @@ public class Attr<Value:Codable> : Codable, AnyAttr {
         let container = try decoder.singleValueContainer()
         if let valueType = Value.self as? _AnyOptionalType.Type {
             if container.decodeNil() {
+                // swiftlint:disable:next force_cast
                 self.wrappedValue = (valueType.nil as! Value)
             } else {
                 self.wrappedValue = try container.decode(Value.self)
@@ -88,5 +87,3 @@ extension Optional: _OptionalType {
         self
     }
 }
-
-

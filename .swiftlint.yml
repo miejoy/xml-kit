@@ -1,0 +1,76 @@
+excluded:
+  - .build
+
+disabled_rules:
+  - todo # for now
+  - for_where
+  - trailing_comma
+
+  # 下面的支持 auto fix
+#  - private_over_fileprivate
+#  - opening_brace
+#  - empty_enum_arguments
+#  - unused_closure_parameter
+#  - trailing_semicolon
+#  - trailing_newline
+#  - syntactic_sugar
+#  - statement_position # ⚠️
+#  - return_arrow_whitespace
+#  - redundant_optional_initialization
+#  - duplicate_imports
+#  - control_statement
+#  - comment_spacing
+#  - comma
+#  - colon
+#  - void_return
+#  - mark
+
+opt_in_rules:
+  - vertical_whitespace_opening_braces
+  - vertical_whitespace_closing_braces
+
+trailing_whitespace:
+  ignores_empty_lines: true
+
+vertical_whitespace:
+  max_empty_lines: 2
+
+identifier_name:
+  allowed_symbols: ["_"]
+  excluded: ["^e$", "^i$", "^id$", "^ad$", "^vc$", "^bg$", "^kv$", "^db$", "^to$", "^no$"]
+
+type_name:
+  allowed_symbols: ["_"]
+
+line_length:
+  warning: 150
+  ignores_urls: true
+  ignores_comments: true
+
+file_length:
+  warning: 2000
+  error: 3000
+
+type_body_length:
+  warning: 300
+  error: 500
+
+function_body_length:
+  warning: 80
+
+cyclomatic_complexity:
+  warning: 40
+  error: 60
+  ignores_case_statements: true
+
+nesting:
+  type_level:
+    warning: 3
+
+#custom_rules:
+#  comment_here:
+#    name: "Comment Here"
+#    regex: "^\/\/\ {3,}"
+#    message: "推荐使用 Comment Here 插件, 而不是 Xcode 自带的注释功能"
+#    severity: warning
+

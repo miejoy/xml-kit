@@ -1,12 +1,12 @@
 //
 //  _XMLKey.swift
-//  
+//
 //
 //  Created by 黄磊 on 2020-03-22.
 //
 
 /// XML 编码/解码 通用 Key
-internal struct _XMLKey : CodingKey {
+internal struct _XMLKey: CodingKey {
     var stringValue: String
     var intValue: Int?
 

@@ -1,6 +1,6 @@
 //
 //  _XMLEncoder+Box.swift
-//  
+//
 //
 //  Created by 黄磊 on 2020-03-23.
 //
@@ -8,22 +8,21 @@
 import Foundation
 
 extension _XMLEncoder {
-    
-    func box(_ value: Bool, with key: String)   -> _XMLElement { return _XMLElement(name: key, value: "\(value)") }
-    func box(_ value: Int, with key: String)    -> _XMLElement { return _XMLElement(name: key, value: "\(value)") }
-    func box(_ value: Int8, with key: String)   -> _XMLElement { return _XMLElement(name: key, value: "\(value)") }
-    func box(_ value: Int16, with key: String)  -> _XMLElement { return _XMLElement(name: key, value: "\(value)") }
-    func box(_ value: Int32, with key: String)  -> _XMLElement { return _XMLElement(name: key, value: "\(value)") }
-    func box(_ value: Int64, with key: String)  -> _XMLElement { return _XMLElement(name: key, value: "\(value)") }
-    func box(_ value: UInt, with key: String)   -> _XMLElement { return _XMLElement(name: key, value: "\(value)") }
-    func box(_ value: UInt8, with key: String)  -> _XMLElement { return _XMLElement(name: key, value: "\(value)") }
+    func box(_ value: Bool, with key: String) -> _XMLElement { return _XMLElement(name: key, value: "\(value)") }
+    func box(_ value: Int, with key: String) -> _XMLElement { return _XMLElement(name: key, value: "\(value)") }
+    func box(_ value: Int8, with key: String) -> _XMLElement { return _XMLElement(name: key, value: "\(value)") }
+    func box(_ value: Int16, with key: String) -> _XMLElement { return _XMLElement(name: key, value: "\(value)") }
+    func box(_ value: Int32, with key: String) -> _XMLElement { return _XMLElement(name: key, value: "\(value)") }
+    func box(_ value: Int64, with key: String) -> _XMLElement { return _XMLElement(name: key, value: "\(value)") }
+    func box(_ value: UInt, with key: String) -> _XMLElement { return _XMLElement(name: key, value: "\(value)") }
+    func box(_ value: UInt8, with key: String) -> _XMLElement { return _XMLElement(name: key, value: "\(value)") }
     func box(_ value: UInt16, with key: String) -> _XMLElement { return _XMLElement(name: key, value: "\(value)") }
     func box(_ value: UInt32, with key: String) -> _XMLElement { return _XMLElement(name: key, value: "\(value)") }
     func box(_ value: UInt64, with key: String) -> _XMLElement { return _XMLElement(name: key, value: "\(value)") }
     func box(_ value: String, with key: String) -> _XMLElement { return _XMLElement(name: key, value: value) }
 
     func box(_ float: Float, with key: String) throws -> _XMLElement {
-        let str : String
+        let str: String
         if float.isInfinite || float.isNaN {
             if case let .convertToString(positiveInfinity: posInfString,
                                             negativeInfinity: negInfString,
@@ -46,7 +45,7 @@ extension _XMLEncoder {
     }
 
     func box(_ double: Double, with key: String) throws -> _XMLElement {
-        let str : String
+        let str: String
         if double.isInfinite || double.isNaN {
             if case let .convertToString(positiveInfinity: posInfString,
                                             negativeInfinity: negInfString,
@@ -93,7 +92,7 @@ extension _XMLEncoder {
                 try closure(date, self)
             } catch {
                 if self.storage.count > depth {
-                    let _ = self.storage.popElement()
+                    _ = self.storage.popElement()
                 }
 
                 throw error
@@ -117,7 +116,7 @@ extension _XMLEncoder {
                 try data.encode(to: self)
             } catch {
                 if self.storage.count > depth {
-                    let _ = self.storage.popElement()
+                    _ = self.storage.popElement()
                 }
                 throw error
             }
@@ -135,7 +134,7 @@ extension _XMLEncoder {
             } catch {
                 // If the value pushed a container before throwing, pop it back off to restore state.
                 if self.storage.count > depth {
-                    let _ = self.storage.popElement()
+                    _ = self.storage.popElement()
                 }
 
                 throw error
@@ -154,10 +153,11 @@ extension _XMLEncoder {
     func box(_ value: Encodable, with key: String) throws -> _XMLElement {
         return try self.box_(value, with: key) ?? _XMLElement(name: key, value: nil)
     }
+    
+    // swiftlint:disable force_cast
 
     // This method is called "box_" instead of "box" to disambiguate it from the overloads. Because the return type here is different from all of the "box" overloads (and is more general), any "box" calls in here would call back into "box" recursively instead of calling the appropriate overload, which is not what we want.
     func box_(_ value: Encodable, with key: String) throws -> _XMLElement? {
-
         let type = Swift.type(of: value)
         if type == Date.self || type == NSDate.self {
             // Respect Date encoding strategy
@@ -179,7 +179,7 @@ extension _XMLEncoder {
             try value.encode(to: self)
         } catch {
             if self.storage.count > depth {
-                let _ = self.storage.popElement()
+                _ = self.storage.popElement()
             }
             throw error
         }
@@ -191,4 +191,5 @@ extension _XMLEncoder {
         return self.storage.popElement()
     }
     
+    // swiftlint:enable force_cast
 }

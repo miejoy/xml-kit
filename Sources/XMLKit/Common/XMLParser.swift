@@ -1,6 +1,6 @@
 //
 //  _XMLParser.swift
-//  
+//
 //
 //  Created by 黄磊 on 2020-03-21.
 //
@@ -11,10 +11,8 @@ import FoundationXML
 import Foundation
 
 
-
 /// XML 解析类，调用的系统的 XMLPaser
 internal class _XMLParser: NSObject, XMLParserDelegate {
-    
     var root: _XMLElement?
     var stack = [_XMLElement]()
     var currentNode: _XMLElement?
@@ -29,14 +27,16 @@ internal class _XMLParser: NSObject, XMLParserDelegate {
             if let node = try parser.parse(with: data) {
                 return node
             } else {
-                throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: [], debugDescription: "The given data could not be parsed into XML."))
+                throw DecodingError.dataCorrupted(DecodingError.Context(
+                    codingPath: [],
+                    debugDescription: "The given data could not be parsed into XML."))
             }
         } catch {
             throw error
         }
     }
     
-    func parse(with data: Data) throws -> _XMLElement?  {
+    func parse(with data: Data) throws -> _XMLElement? {
         let xmlParser = XMLParser(data: data)
         xmlParser.delegate = self
         
@@ -54,7 +54,13 @@ internal class _XMLParser: NSObject, XMLParserDelegate {
         stack = [_XMLElement]()
     }
     
-    func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String] = [:]) {
+    func parser(
+        _ parser: XMLParser,
+        didStartElement elementName: String,
+        namespaceURI: String?,
+        qualifiedName qName: String?,
+        attributes attributeDict: [String: String] = [:]
+    ) {
         let node = _XMLElement(name: elementName)
         node.attributes = attributeDict
         stack.append(node)
@@ -66,7 +72,7 @@ internal class _XMLParser: NSObject, XMLParserDelegate {
     }
     
     func parser(_ parser: XMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
-        if let poppedNode = stack.popLast(){
+        if let poppedNode = stack.popLast() {
             if let content = poppedNode.value?.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines) {
                 if content.isEmpty {
                     poppedNode.value = nil
@@ -75,7 +81,7 @@ internal class _XMLParser: NSObject, XMLParserDelegate {
                 }
             }
             
-            if (stack.isEmpty) {
+            if stack.isEmpty {
                 root = poppedNode
                 currentNode = nil
             } else {

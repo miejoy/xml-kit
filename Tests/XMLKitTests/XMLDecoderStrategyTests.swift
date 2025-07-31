@@ -1,6 +1,6 @@
 //
 //  XMLDecoderStrategyTests.swift
-//  
+//
 //
 //  Created by 黄磊 on 2020-03-23.
 //
@@ -9,12 +9,9 @@ import XCTest
 import XMLKit
 
 final class XMLDecoderStrategyTests: XCTestCase {
-    
-    
     // MARK: - Data
     
     func testDateSecondsSince1970() throws {
-        
         let data = dateXMLStrSince1970.data(using: .utf8)!
         
         let decoder = XMLDecoder()
@@ -26,11 +23,9 @@ final class XMLDecoderStrategyTests: XCTestCase {
         XCTAssertEqual(date.updateTime!.description, s_dateOption.description)
         XCTAssertEqual(date.createDate.description, s_date.description)
         XCTAssertEqual(date.updateDate!.description, s_dateOption.description)
-        
     }
     
     func testDateSecondsSince1970NoOption() throws {
-        
         let data = dateXMLStrSince1970NoOption.data(using: .utf8)!
         
         let decoder = XMLDecoder()
@@ -42,11 +37,9 @@ final class XMLDecoderStrategyTests: XCTestCase {
         XCTAssertNil(date.updateTime)
         XCTAssertEqual(date.createDate.description, s_date.description)
         XCTAssertNil(date.updateDate)
-        
     }
     
     func testDateMilliSecondsSince1970() throws {
-        
         let data = dateXMLStrMilliSince1970.data(using: .utf8)!
         
         let decoder = XMLDecoder()
@@ -58,11 +51,9 @@ final class XMLDecoderStrategyTests: XCTestCase {
         XCTAssertEqual(date.updateTime!.description, s_dateOption.description)
         XCTAssertEqual(date.createDate.description, s_date.description)
         XCTAssertEqual(date.updateDate!.description, s_dateOption.description)
-        
     }
     
     func testDateIso8601() throws {
-        
         let data = dateXMLStrIso8601.data(using: .utf8)!
         
         let decoder = XMLDecoder()
@@ -74,11 +65,9 @@ final class XMLDecoderStrategyTests: XCTestCase {
         XCTAssertEqual(date.updateTime!.description, s_dateOption.description)
         XCTAssertEqual(date.createDate.description, s_date.description)
         XCTAssertEqual(date.updateDate!.description, s_dateOption.description)
-        
     }
     
     func testDateFormatted() throws {
-        
         let data = dateXMLStrFormatted.data(using: .utf8)!
         
         let decoder = XMLDecoder()
@@ -90,11 +79,9 @@ final class XMLDecoderStrategyTests: XCTestCase {
         XCTAssertEqual(date.updateTime!.description, s_dateOption.description)
         XCTAssertEqual(date.createDate.description, s_date.description)
         XCTAssertEqual(date.updateDate!.description, s_dateOption.description)
-        
     }
     
     func testDateCustom() throws {
-        
         let data = dateXMLStrFormatted.data(using: .utf8)!
         
         let decoder = XMLDecoder()
@@ -113,11 +100,9 @@ final class XMLDecoderStrategyTests: XCTestCase {
         XCTAssertEqual(date.updateTime!.description, s_dateOption.description)
         XCTAssertEqual(date.createDate.description, s_date.description)
         XCTAssertEqual(date.updateDate!.description, s_dateOption.description)
-        
     }
     
     func testDateCustomNoOption() throws {
-        
         let data = dateXMLStrFormattedNoOption.data(using: .utf8)!
         
         let decoder = XMLDecoder()
@@ -136,13 +121,11 @@ final class XMLDecoderStrategyTests: XCTestCase {
         XCTAssertNil(date.updateTime)
         XCTAssertEqual(date.createDate.description, s_date.description)
         XCTAssertNil(date.updateDate)
-        
     }
     
     // MARK: - Data
     
     func testDataBase64() throws {
-        
         let data = dataXMLStrBase64.data(using: .utf8)!
         
         let decoder = XMLDecoder()
@@ -154,11 +137,9 @@ final class XMLDecoderStrategyTests: XCTestCase {
         XCTAssertEqual(theData.dataAttrOption!, s_dataOption)
         XCTAssertEqual(theData.data, s_data)
         XCTAssertEqual(theData.dataOption!, s_dataOption)
-        
     }
     
     func testDataCustom() throws {
-        
         let data = dataXMLStrBase64.data(using: .utf8)!
         
         let decoder = XMLDecoder()
@@ -177,13 +158,11 @@ final class XMLDecoderStrategyTests: XCTestCase {
         XCTAssertEqual(theData.dataAttrOption!, s_dataOption.base64EncodedString().data(using: .utf8))
         XCTAssertEqual(theData.data, s_data.base64EncodedString().data(using: .utf8))
         XCTAssertEqual(theData.dataOption!, s_dataOption.base64EncodedString().data(using: .utf8))
-        
     }
     
     // MARK: - Float
     
     func testFloatConvert() throws {
-        
         let data = floatXML.data(using: .utf8)!
         
         let decoder = XMLDecoder()
@@ -195,11 +174,9 @@ final class XMLDecoderStrategyTests: XCTestCase {
         XCTAssertEqual(theFloat.floatAttrOption!, -Float.infinity)
         XCTAssertTrue(theFloat.float.isNaN)
         XCTAssertEqual(theFloat.floatOption!, s_floatNormal)
-        
     }
     
     func testDoubleConvert() throws {
-        
         let data = floatXML.data(using: .utf8)!
         
         let decoder = XMLDecoder()
@@ -211,13 +188,11 @@ final class XMLDecoderStrategyTests: XCTestCase {
         XCTAssertEqual(theFloat.floatAttrOption!, -Double.infinity)
         XCTAssertTrue(theFloat.float.isNaN)
         XCTAssertTrue(abs(theFloat.floatOption! - Double(s_floatNormal)) < 0.001)
-        
     }
     
     // MARK: - Key
     
     func testElementNameFirstUppercase() throws {
-        
         let data = elementXMLFirstUppercase.data(using: .utf8)!
         
         let decoder = XMLDecoder()
@@ -227,11 +202,9 @@ final class XMLDecoderStrategyTests: XCTestCase {
         // 这里存在误差，无法直接对比
         XCTAssertEqual(element.elementName, s_int)
         XCTAssertEqual(element.elementNameOption!, s_intOption)
-        
     }
     
     func testElementNameSnakeCase() throws {
-        
         let data = elementXMLSnakeCase.data(using: .utf8)!
         
         let decoder = XMLDecoder()
@@ -241,14 +214,12 @@ final class XMLDecoderStrategyTests: XCTestCase {
         // 这里存在误差，无法直接对比
         XCTAssertEqual(element.elementName, s_int)
         XCTAssertEqual(element.elementNameOption!, s_intOption)
-        
     }
     
     func testElementNameCustom() throws {
-        
         let dic = [
-            "element_name" : "elementName",
-            "element_name_option" : "elementNameOption"
+            "element_name": "elementName",
+            "element_name_option": "elementNameOption"
         ]
         
         let data = elementXMLSnakeCase.data(using: .utf8)!
@@ -263,11 +234,9 @@ final class XMLDecoderStrategyTests: XCTestCase {
         // 这里存在误差，无法直接对比
         XCTAssertEqual(element.elementName, s_int)
         XCTAssertEqual(element.elementNameOption!, s_intOption)
-        
     }
     
     func testAttrNameFirstUppercase() throws {
-        
         let data = attrXMLFirstUppercase.data(using: .utf8)!
         
         let decoder = XMLDecoder()
@@ -277,11 +246,9 @@ final class XMLDecoderStrategyTests: XCTestCase {
         // 这里存在误差，无法直接对比
         XCTAssertEqual(attr.attrName, s_str)
         XCTAssertEqual(attr.attrNameOption!, s_strOption)
-        
     }
     
     func testAttrNameSnakeCase() throws {
-        
         let data = attrXMLSnakeCase.data(using: .utf8)!
         
         let decoder = XMLDecoder()
@@ -291,14 +258,12 @@ final class XMLDecoderStrategyTests: XCTestCase {
         // 这里存在误差，无法直接对比
         XCTAssertEqual(attr.attrName, s_str)
         XCTAssertEqual(attr.attrNameOption!, s_strOption)
-        
     }
     
     func testAttrNameCustom() throws {
-        
         let dic = [
-            "attr_name" : "attrName",
-            "attr_name_option" : "attrNameOption"
+            "attr_name": "attrName",
+            "attr_name_option": "attrNameOption"
         ]
         
         let data = attrXMLSnakeCase.data(using: .utf8)!
@@ -313,7 +278,5 @@ final class XMLDecoderStrategyTests: XCTestCase {
         // 这里存在误差，无法直接对比
         XCTAssertEqual(attr.attrName, s_str)
         XCTAssertEqual(attr.attrNameOption!, s_strOption)
-        
     }
-    
 }

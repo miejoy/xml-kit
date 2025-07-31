@@ -1,6 +1,6 @@
 //
 //  _XMLElement.swift
-//  
+//
 //
 //  Created by 黄磊 on 2020-03-21.
 //
@@ -9,9 +9,8 @@ import Foundation
 
 /// XML 解析元素
 internal class _XMLElement {
-    
     var name: String
-    var value: String? = nil
+    var value: String?
     var attributes: [String: String] = [:]
     var children: [_XMLElement] = []
     
@@ -22,7 +21,6 @@ internal class _XMLElement {
     }
     
     func toXMLString(with header: XMLHeader? = nil, prettyPrinted: Bool) -> String {
-        
         if let header = header, let headerXML = header.toXML() {
             return headerXML + _toXMLString(prettyPrinted: prettyPrinted)
         } else {
@@ -63,7 +61,6 @@ internal class _XMLElement {
 let s_xmlEscapedCharacters = [("&", "&amp"), ("<", "&lt;"), (">", "&gt;"), ( "'", "&apos;"), ("\"", "&quot;")]
 
 extension String {
-    
     func xmlEscape() -> String {
         var str = self
         
