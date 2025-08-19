@@ -8,6 +8,7 @@
 import XCTest
 import XMLKit
 
+// swiftlint:disable:next type_body_length
 final class XMLEncoderTests: XCTestCase {
     func testNormal() throws {
         let data = userXMLStrNarmal.data(using: .utf8)!

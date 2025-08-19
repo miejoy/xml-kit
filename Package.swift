@@ -2,6 +2,12 @@
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
+import Foundation
+
+var plugins: [Target.PluginUsage] = []
+if ProcessInfo.processInfo.environment["DISABLE_SWIFTLINT"] != "1" {
+    plugins.append(.plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLintPlugins"))
+}
 
 let package = Package(
     name: "xml-kit",
@@ -25,12 +31,11 @@ let package = Package(
         .target(
             name: "XMLKit",
             dependencies: [],
-            plugins: [
-                .plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLintPlugins")
-            ]
+            plugins: plugins
         ),
         .testTarget(
             name: "XMLKitTests",
-            dependencies: ["XMLKit"]),
+            dependencies: ["XMLKit"],
+            plugins: plugins),
     ]
 )

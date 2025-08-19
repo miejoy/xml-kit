@@ -166,7 +166,9 @@ final class XMLDecoderStrategyTests: XCTestCase {
         let data = floatXML.data(using: .utf8)!
         
         let decoder = XMLDecoder()
-        decoder.nonConformingFloatDecodingStrategy = .convertFromString(positiveInfinity: s_floatPositiveInfinity, negativeInfinity: s_floatNegativeInfinity, nan: s_floatNan)
+        decoder.nonConformingFloatDecodingStrategy = .convertFromString(positiveInfinity: s_floatPositiveInfinity,
+                                                                        negativeInfinity: s_floatNegativeInfinity,
+                                                                        nan: s_floatNan)
         let theFloat = try decoder.decode(FloatStrategy.self, from: data)
         
         // 这里存在误差，无法直接对比
@@ -180,7 +182,9 @@ final class XMLDecoderStrategyTests: XCTestCase {
         let data = floatXML.data(using: .utf8)!
         
         let decoder = XMLDecoder()
-        decoder.nonConformingFloatDecodingStrategy = .convertFromString(positiveInfinity: s_floatPositiveInfinity, negativeInfinity: s_floatNegativeInfinity, nan: s_floatNan)
+        decoder.nonConformingFloatDecodingStrategy = .convertFromString(positiveInfinity: s_floatPositiveInfinity,
+                                                                        negativeInfinity: s_floatNegativeInfinity,
+                                                                        nan: s_floatNan)
         let theFloat = try decoder.decode(DoubleStrategy.self, from: data)
         
         // 这里存在误差，无法直接对比

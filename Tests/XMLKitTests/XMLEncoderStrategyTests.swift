@@ -212,10 +212,14 @@ final class XMLEncoderStrategyTests: XCTestCase {
         let data = floatXML.data(using: .utf8)!
         
         let decoder = XMLDecoder()
-        decoder.nonConformingFloatDecodingStrategy = .convertFromString(positiveInfinity: s_floatPositiveInfinity, negativeInfinity: s_floatNegativeInfinity, nan: s_floatNan)
+        decoder.nonConformingFloatDecodingStrategy = .convertFromString(positiveInfinity: s_floatPositiveInfinity,
+                                                                        negativeInfinity: s_floatNegativeInfinity,
+                                                                        nan: s_floatNan)
         let tmpData = try decoder.decode(FloatStrategy.self, from: data)
         let encoder = XMLEncoder()
-        encoder.nonConformingFloatEncodingStrategy = .convertToString(positiveInfinity: s_floatPositiveInfinity, negativeInfinity: s_floatNegativeInfinity, nan: s_floatNan)
+        encoder.nonConformingFloatEncodingStrategy = .convertToString(positiveInfinity: s_floatPositiveInfinity,
+                                                                      negativeInfinity: s_floatNegativeInfinity,
+                                                                      nan: s_floatNan)
         let newData = try encoder.encode(tmpData, withRootKey: "float")
         let theFloat = try decoder.decode(FloatStrategy.self, from: newData)
         
@@ -230,10 +234,14 @@ final class XMLEncoderStrategyTests: XCTestCase {
         let data = floatXML.data(using: .utf8)!
         
         let decoder = XMLDecoder()
-        decoder.nonConformingFloatDecodingStrategy = .convertFromString(positiveInfinity: s_floatPositiveInfinity, negativeInfinity: s_floatNegativeInfinity, nan: s_floatNan)
+        decoder.nonConformingFloatDecodingStrategy = .convertFromString(positiveInfinity: s_floatPositiveInfinity,
+                                                                        negativeInfinity: s_floatNegativeInfinity,
+                                                                        nan: s_floatNan)
         let tmpData = try decoder.decode(DoubleStrategy.self, from: data)
         let encoder = XMLEncoder()
-        encoder.nonConformingFloatEncodingStrategy = .convertToString(positiveInfinity: s_floatPositiveInfinity, negativeInfinity: s_floatNegativeInfinity, nan: s_floatNan)
+        encoder.nonConformingFloatEncodingStrategy = .convertToString(positiveInfinity: s_floatPositiveInfinity,
+                                                                      negativeInfinity: s_floatNegativeInfinity,
+                                                                      nan: s_floatNan)
         let newData = try encoder.encode(tmpData, withRootKey: "float")
         let theFloat = try decoder.decode(DoubleStrategy.self, from: newData)
         

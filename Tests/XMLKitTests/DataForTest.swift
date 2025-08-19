@@ -339,13 +339,14 @@ var s_iso8601Formatter: ISO8601DateFormatter = {
     formatter.formatOptions = .withInternetDateTime
     return formatter
 }()
-let s_data: Data = "asd".data(using: .utf8)!
-let s_dataOption: Data = "qwe".data(using: .utf8)!
+let s_data: Data = Data("asd".utf8)
+let s_dataOption: Data = Data("qwe".utf8)
 let s_floatNormal: Float = 1.1
 let s_floatPositiveInfinity = "Positive Infinity"
 let s_floatNegativeInfinity = "Negative Infinity"
 let s_floatNan = "Nan"
 
+// swiftlint:disable line_length
 
 let userXMLStrNarmal = """
 <user>
@@ -629,3 +630,5 @@ let userStr = """
     "age" : \(s_intOption),
 }
 """
+
+// swiftlint:enable line_length
