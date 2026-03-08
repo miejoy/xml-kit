@@ -360,13 +360,13 @@ final class XMLDecoderTests: XCTestCase {
         
         // swiftlint:disable line_length
         let str = """
-<?xml version=\'1.0\' encoding=\'UTF-8\'?>\n<TwilioResponse><Message><Sid>***</Sid><DateCreated>Tue, 28 Apr 2020 10:05:23 +0000</DateCreated><DateUpdated>Tue, 28 Apr 2020 10:05:23 +0000</DateUpdated><DateSent/><AccountSid>***</AccountSid><To>+8617***</To><From>+185****</From><MessagingServiceSid/><Body>content</Body><Status>queued</Status><NumSegments>1</NumSegments><NumMedia>0</NumMedia><Direction>outbound-api</Direction><ApiVersion>2010-04-01</ApiVersion><Price/><PriceUnit>USD</PriceUnit><ErrorCode/><ErrorMessage/><Uri>/2010-04-01/Accounts/***/Messages/***</Uri><SubresourceUris><Media>/2010-04-01/Accounts/***/Messages/***/Media</Media></SubresourceUris></Message></TwilioResponse>
+<?xml version=\'1.0\' encoding=\'UTF-8\'?>\n<TwilioResponse><Message><Sid>test</Sid><DateCreated>Tue, 28 Apr 2020 10:05:23 +0000</DateCreated><DateUpdated>Tue, 28 Apr 2020 10:05:23 +0000</DateUpdated><DateSent/><AccountSid>***</AccountSid><To>+8617***</To><From>+185****</From><MessagingServiceSid/><Body>content</Body><Status>queued</Status><NumSegments>1</NumSegments><NumMedia>0</NumMedia><Direction>outbound-api</Direction><ApiVersion>2010-04-01</ApiVersion><Price/><PriceUnit>USD</PriceUnit><ErrorCode/><ErrorMessage/><Uri>/2010-04-01/Accounts/***/Messages/***</Uri><SubresourceUris><Media>/2010-04-01/Accounts/***/Messages/***/Media</Media></SubresourceUris></Message></TwilioResponse>
 """
         // swiftlint:enable line_length
         let decoder = XMLDecoder()
         decoder.elementNameDecodingStrategy = .lowercaseFirstLetter
         let response = try decoder.decode(Response.self, from: str.data(using: .utf8)!)
         
-        XCTAssertEqual(response.message.sid, "SM2937db4f67a44d708a3f4ab2cccc01ff")
+        XCTAssertEqual(response.message.sid, "test")
     }
 }

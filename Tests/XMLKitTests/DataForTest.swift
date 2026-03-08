@@ -334,7 +334,7 @@ var s_customDateFormatter: DateFormatter {
     dft.dateFormat = "yyyy-MM-dd HH:mm:ss Z"
     return dft
 }
-var s_iso8601Formatter: ISO8601DateFormatter = {
+nonisolated(unsafe) let s_iso8601Formatter: ISO8601DateFormatter = {
     let formatter = ISO8601DateFormatter()
     formatter.formatOptions = .withInternetDateTime
     return formatter
